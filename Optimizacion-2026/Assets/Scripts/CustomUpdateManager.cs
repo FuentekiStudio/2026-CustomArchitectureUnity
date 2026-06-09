@@ -10,7 +10,7 @@ public class CustomUpdateManager : MonoBehaviour
 
     void Start()
     {
-        
+        CLogger.Log("CustomUpdateManager");
     }
 
     
