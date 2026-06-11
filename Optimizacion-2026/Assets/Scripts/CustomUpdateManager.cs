@@ -13,6 +13,7 @@ public class CustomUpdateManager : MonoBehaviour
         CLogger.Log("CustomUpdateManager");
     }
 
+    // Ordenamiento de listas de updateables segun el orden de prioridad determinado en la interface
     
     void Update()
     {
@@ -37,6 +38,8 @@ public class CustomUpdateManager : MonoBehaviour
             lateUpdateable.LateUpdate(Time.deltaTime);
         }
     }
+    
+    
 
     public void Register()
     {
@@ -47,5 +50,7 @@ public class CustomUpdateManager : MonoBehaviour
     {
 
     }
-
+    
+    
+    // Agregar metodos para activar o desactivar Updateables sin desuscribir
 }
