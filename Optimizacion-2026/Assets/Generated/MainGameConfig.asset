@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
   player:
     moveSpeed: 8
-    minHorizontal: -9
-    maxHorizontal: 9
+    minHorizontal: -9.5
+    maxHorizontal: 9.5
     baseDamage: 1
     baseProjectileCount: 1
     fireRate: 0.2
