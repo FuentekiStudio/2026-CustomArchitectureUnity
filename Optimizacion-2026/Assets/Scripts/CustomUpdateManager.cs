@@ -1,104 +1,117 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CustomUpdateManager : MonoBehaviour
 {
-    public IUpdateable[] updateableList;
-    public IFixedUpdateable[] fixedUpdateableList;
-    public ILateUpdateable[] lateUpdateableList;
+    private readonly List<IUpdateable> updateables = new List<IUpdateable>();
+    private readonly List<IUpdateable> updateablesToRemove = new List<IUpdateable>();
 
-    
-    private List<IUpdateable> updateables = new List<IUpdateable>();
-    private List<IUpdateable> updateablesToRemove = new List<IUpdateable>();
+    private readonly List<IFixedUpdateable> fixedUpdateables = new List<IFixedUpdateable>();
+    private readonly List<IFixedUpdateable> fixedUpdateablesToRemove = new List<IFixedUpdateable>();
 
-    private List<IFixedUpdateable> fixedUpdateables = new List<IFixedUpdateable>();
-    private List<IFixedUpdateable> fixedUpdateablesToRemove = new List<IFixedUpdateable>();
+    private readonly List<ILateUpdateable> lateUpdateables = new List<ILateUpdateable>();
+    private readonly List<ILateUpdateable> lateUpdateablesToRemove = new List<ILateUpdateable>();
 
-    private List<ILateUpdateable> lateUpdateables = new List<ILateUpdateable>();
-    private List<ILateUpdateable> lateUpdateablesToRemove = new List<ILateUpdateable>();
-
-
-    void Start()
+    private void Update()
     {
-        CLogger.Log("CustomUpdateManager Init");
-
-
-    }
-
-    
-    void Update()
-    {
-        foreach (IUpdateable updateable in updateables)
+        for (int i = 0; i < updateables.Count; i++)
         {
-            updateable.Update(Time.deltaTime);
+            updateables[i].Update(Time.deltaTime);
         }
-        foreach (IUpdateable updateable in updateablesToRemove)
+
+        for (int i = 0; i < updateablesToRemove.Count; i++)
         {
-            updateables.Remove(updateable);
+            updateables.Remove(updateablesToRemove[i]);
         }
+
         updateablesToRemove.Clear();
-
     }
 
     private void FixedUpdate()
     {
-        foreach(IFixedUpdateable fixedUpdateable in fixedUpdateables)
+        for (int i = 0; i < fixedUpdateables.Count; i++)
         {
-            fixedUpdateable.FixedUpdate(Time.fixedDeltaTime);
+            fixedUpdateables[i].FixedUpdate(Time.fixedDeltaTime);
         }
-        foreach(IFixedUpdateable fixedUpdatable in fixedUpdateablesToRemove)
+
+        for (int i = 0; i < fixedUpdateablesToRemove.Count; i++)
         {
-            fixedUpdateables.Remove(fixedUpdatable);
+            fixedUpdateables.Remove(fixedUpdateablesToRemove[i]);
         }
-        fixedUpdateablesToRemove.Clear ();
+
+        fixedUpdateablesToRemove.Clear();
     }
 
     private void LateUpdate()
     {
-        foreach (ILateUpdateable lateUpdateable in lateUpdateables)
+        for (int i = 0; i < lateUpdateables.Count; i++)
         {
-            lateUpdateable.LateUpdate(Time.deltaTime);
+            lateUpdateables[i].LateUpdate(Time.deltaTime);
         }
-        foreach(ILateUpdateable lateUpdateable in lateUpdateablesToRemove)
+
+        for (int i = 0; i < lateUpdateablesToRemove.Count; i++)
         {
-            lateUpdateables.Remove(lateUpdateable);
+            lateUpdateables.Remove(lateUpdateablesToRemove[i]);
         }
+
         lateUpdateablesToRemove.Clear();
     }
 
-    public void RegisterUpdateable( IUpdateable updateable)
+    public void RegisterUpdateable(IUpdateable updateable)
     {
-        // Logica de registro. Lo hacemos directo por lista o por eventos?
-        updateables.Add(updateable);
+        if (updateable != null && !updateables.Contains(updateable))
+        {
+            updateables.Add(updateable);
+        }
     }
 
-    public void UnregisterUpdateable(IUpdateable updateable) 
+    public void UnregisterUpdateable(IUpdateable updateable)
     {
-        updateablesToRemove.Add(updateable);
+        if (updateable != null && !updateablesToRemove.Contains(updateable))
+        {
+            updateablesToRemove.Add(updateable);
+        }
     }
 
     public void RegisterFixedUpdateable(IFixedUpdateable fixedUpdateable)
     {
-        // Logica de registro. Lo hacemos directo por lista o por eventos?
-        fixedUpdateables.Add(fixedUpdateable);
+        if (fixedUpdateable != null && !fixedUpdateables.Contains(fixedUpdateable))
+        {
+            fixedUpdateables.Add(fixedUpdateable);
+        }
     }
 
     public void UnregisterFixedUpdateable(IFixedUpdateable fixedUpdateable)
     {
-        fixedUpdateablesToRemove.Add(fixedUpdateable);
+        if (fixedUpdateable != null && !fixedUpdateablesToRemove.Contains(fixedUpdateable))
+        {
+            fixedUpdateablesToRemove.Add(fixedUpdateable);
+        }
     }
 
     public void RegisterLateUpdateable(ILateUpdateable lateUpdateable)
     {
-        // Logica de registro. Lo hacemos directo por lista o por eventos?
-        lateUpdateables.Add(lateUpdateable);
+        if (lateUpdateable != null && !lateUpdateables.Contains(lateUpdateable))
+        {
+            lateUpdateables.Add(lateUpdateable);
+        }
     }
 
     public void UnregisterLateUpdateable(ILateUpdateable lateUpdateable)
     {
-        lateUpdateables.Add(lateUpdateable);
+        if (lateUpdateable != null && !lateUpdateablesToRemove.Contains(lateUpdateable))
+        {
+            lateUpdateablesToRemove.Add(lateUpdateable);
+        }
     }
 
-
+    public void Clear()
+    {
+        updateables.Clear();
+        updateablesToRemove.Clear();
+        fixedUpdateables.Clear();
+        fixedUpdateablesToRemove.Clear();
+        lateUpdateables.Clear();
+        lateUpdateablesToRemove.Clear();
+    }
 }
