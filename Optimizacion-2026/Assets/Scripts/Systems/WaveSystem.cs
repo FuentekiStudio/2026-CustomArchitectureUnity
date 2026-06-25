@@ -119,10 +119,10 @@ public sealed class WaveSystem : IUpdateable
             enemyCursor = new SpawnCursor<EnemySpawnData>(config.enemies);
             buffWallCursor = new SpawnCursor<BuffWallSpawnData>(config.buffWalls);
             bossTimer = 0f;
-            bossSpawned = !config.boss.enabled;
+            bossSpawned = !config.megazord.enabled;
         }
 
-        public int TotalEnemies => enemyCursor.TotalCount + (config.boss.enabled ? 1 : 0);
+        public int TotalEnemies => enemyCursor.TotalCount + (config.megazord.enabled ? 1 : 0);
         public bool IsCombatSpawnComplete => enemyCursor.IsComplete && bossSpawned;
 
         public void Update(float deltaTime, SpawnSystem spawnSystem)
@@ -133,15 +133,15 @@ public sealed class WaveSystem : IUpdateable
             if (!bossSpawned)
             {
                 bossTimer += deltaTime;
-                if (bossTimer >= Mathf.Max(0f, config.boss.delay))
+                if (bossTimer >= Mathf.Max(0f, config.megazord.delay))
                 {
                     spawnSystem.SpawnEnemy(new EnemySpawnData
                     {
-                        type = EnemyType.Boss,
+                        type = EnemyType.Megazord,
                         count = 1,
                         interval = 0f,
-                        health = config.boss.health,
-                        speed = config.boss.speed
+                        health = config.megazord.health,
+                        speed = config.megazord.speed
                     });
                     bossSpawned = true;
                 }

@@ -198,6 +198,7 @@ public sealed class SpawnSystem
         {
             EnemyType.Elite => PoolId.EnemyElite,
             EnemyType.Boss => PoolId.EnemyBoss,
+            EnemyType.Megazord => PoolId.MegazordBoss,
             _ => PoolId.EnemyNormal
         };
     }
