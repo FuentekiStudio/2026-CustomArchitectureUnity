@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public sealed class SpawnSystem
@@ -42,7 +43,7 @@ public sealed class SpawnSystem
             type = data.type,
             health = Mathf.Max(1, data.health),
             speed = Mathf.Max(0f, data.speed),
-            position = enemySpawnPoint != null ? enemySpawnPoint.position : Vector3.zero,
+            position = GetEnemySpawnPosition(),
             view = view,
             collider = collider,
             poolable = poolable,
@@ -72,7 +73,7 @@ public sealed class SpawnSystem
             health = Mathf.Max(1, data.health),
             speed = Mathf.Max(0f, data.speed),
             buff = new BuffData { type = data.type, value = data.value },
-            position = buffWallSpawnPoint != null ? buffWallSpawnPoint.position : Vector3.zero,
+            position = GetSpawnPosition(buffWallSpawnPoint),
             view = view,
             collider = collider,
             poolable = poolable,
@@ -81,6 +82,7 @@ public sealed class SpawnSystem
         };
 
         view.transform.position = wall.position;
+        UpdateBuffWallView(view, wall.buff);
         physicsRegistry.Register(collider, new EntityRef(EntityKind.BuffWall, wall));
         buffWallSystem.Register(wall);
         return wall;
@@ -125,6 +127,50 @@ public sealed class SpawnSystem
         }
     }
 
+
+    private Vector3 GetEnemySpawnPosition()
+    {
+        Vector3 position = GetSpawnPosition(enemySpawnPoint);
+        float randomXRange = config != null ? Mathf.Max(0f, config.spawn.randomXRange) : 5f;
+        position.x += Random.Range(-randomXRange, randomXRange);
+        return position;
+    }
+
+    private static Vector3 GetSpawnPosition(Transform spawnPoint)
+    {
+        return spawnPoint != null ? spawnPoint.position : Vector3.zero;
+    }
+
+    private static void UpdateBuffWallView(GameObject view, BuffData buff)
+    {
+        if (view == null)
+        {
+            return;
+        }
+
+        TMP_Text text = FindBuffWallText(view);
+        if (text != null)
+        {
+            string prefix = buff.type == BuffType.Damage ? "DMG" : "x";
+            text.text = $"{prefix} {buff.value}";
+        }
+    }
+
+
+    private static TMP_Text FindBuffWallText(GameObject view)
+    {
+        TMP_Text[] texts = view.GetComponentsInChildren<TMP_Text>(true);
+        for (int i = 0; i < texts.Length; i++)
+        {
+            if (texts[i].gameObject.name == "Text (TMP)")
+            {
+                return texts[i];
+            }
+        }
+
+        return texts.Length > 0 ? texts[0] : null;
+    }
+
     private static bool TryPreparePoolable(IPoolable poolable, Transform fallbackTransform, out GameObject view, out Collider collider)
     {
         view = null;
@@ -141,7 +187,7 @@ public sealed class SpawnSystem
             view.transform.position = fallbackTransform.position;
         }
 
-        collider = view.GetComponentInChildren<Collider>();
+        collider = view.GetComponentInChildren<Collider>(true);
         poolable.Activate();
         return true;
     }
@@ -250,7 +296,7 @@ public sealed class CollisionSystem : IFixedUpdateable
         for (int i = projectiles.Count - 1; i >= 0; i--)
         {
             ProjectileEntity projectile = projectiles[i];
-            int count = Physics.OverlapSphereNonAlloc(projectile.position, projectileSystem.HitRadius, hitBuffer);
+            int count = Physics.OverlapSphereNonAlloc(projectile.position, projectileSystem.HitRadius, hitBuffer, Physics.AllLayers, QueryTriggerInteraction.Collide);
 
             for (int hitIndex = 0; hitIndex < count; hitIndex++)
             {

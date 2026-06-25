@@ -51,6 +51,7 @@ public sealed class GameConfig : ScriptableObject
 {
     public PlayerConfig player = PlayerConfig.Default;
     public ProjectileConfig projectile = ProjectileConfig.Default;
+    public SpawnConfig spawn = SpawnConfig.Default;
     public LaneConfig lanes = LaneConfig.Default;
     public PoolConfig pools = new PoolConfig();
     public WaveConfig[] waves = Array.Empty<WaveConfig>();
@@ -74,6 +75,17 @@ public struct PlayerConfig
         baseDamage = 1,
         baseProjectileCount = 1,
         fireRate = 0.2f
+    };
+}
+
+[Serializable]
+public struct SpawnConfig
+{
+    public float randomXRange;
+
+    public static SpawnConfig Default => new SpawnConfig
+    {
+        randomXRange = 5f
     };
 }
 

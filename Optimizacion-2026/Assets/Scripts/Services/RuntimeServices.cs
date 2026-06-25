@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public sealed class TimeService
 {
@@ -18,6 +21,23 @@ public sealed class InputSystemService
     {
         float keyboard = 0f;
 
+#if ENABLE_INPUT_SYSTEM
+        Keyboard currentKeyboard = Keyboard.current;
+        if (currentKeyboard != null)
+        {
+            if (currentKeyboard.aKey.isPressed || currentKeyboard.leftArrowKey.isPressed)
+            {
+                keyboard -= 1f;
+            }
+
+            if (currentKeyboard.dKey.isPressed || currentKeyboard.rightArrowKey.isPressed)
+            {
+                keyboard += 1f;
+            }
+        }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             keyboard -= 1f;
@@ -27,18 +47,43 @@ public sealed class InputSystemService
         {
             keyboard += 1f;
         }
+#endif
 
         return Mathf.Clamp(keyboard, -1f, 1f);
     }
 
     public bool IsShooting()
     {
-        return Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0);
+        bool shooting = false;
+
+#if ENABLE_INPUT_SYSTEM
+        Mouse currentMouse = Mouse.current;
+        Keyboard currentKeyboard = Keyboard.current;
+        shooting |= currentMouse != null && currentMouse.leftButton.isPressed;
+        shooting |= currentKeyboard != null && currentKeyboard.spaceKey.isPressed;
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        shooting |= Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0);
+#endif
+
+        return shooting;
     }
 
     public bool PausePressed()
     {
-        return Input.GetKeyDown(KeyCode.Escape);
+        bool pressed = false;
+
+#if ENABLE_INPUT_SYSTEM
+        Keyboard currentKeyboard = Keyboard.current;
+        pressed |= currentKeyboard != null && currentKeyboard.escapeKey.wasPressedThisFrame;
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        pressed |= Input.GetKeyDown(KeyCode.Escape);
+#endif
+
+        return pressed;
     }
 }
 

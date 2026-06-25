@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
   player:
     moveSpeed: 8
-    minHorizontal: -6
-    maxHorizontal: 6
+    minHorizontal: -9
+    maxHorizontal: 9
     baseDamage: 1
     baseProjectileCount: 1
     fireRate: 0.2
@@ -23,6 +23,8 @@ MonoBehaviour:
     speed: 16
     lifetime: 4
     hitRadius: 0.45
+  spawn:
+    randomXRange: 5
   lanes:
     movementAxis: 1
     enemyMoveDirection: -1
@@ -41,10 +43,10 @@ MonoBehaviour:
       prefab: {fileID: 6945120636576509202, guid: 94d9ed78b09fde44ba3b99ddb6ab433f, type: 3}
       prewarmCount: 2
     - id: 3
-      prefab: {fileID: 1429920910808157550, guid: edb4e5e42670eec44ab470ef061feadf, type: 3}
+      prefab: {fileID: 834171794331398335, guid: 7cde5a1fef47f4342891007c7f73b56a, type: 3}
       prewarmCount: 6
     - id: 4
-      prefab: {fileID: 2052076644013176355, guid: e6fa361451baeef4588b91e9fb8d7219, type: 3}
+      prefab: {fileID: 834171794331398335, guid: 7cde5a1fef47f4342891007c7f73b56a, type: 3}
       prewarmCount: 6
     - id: 5
       prefab: {fileID: 6852009541234005464, guid: 24f6313c38ae27941b4c2f97ab88eecc, type: 3}

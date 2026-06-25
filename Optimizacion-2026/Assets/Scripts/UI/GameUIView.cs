@@ -3,6 +3,8 @@ using UnityEngine;
 
 public sealed class GameUIView : MonoBehaviour
 {
+    private const int HudCanvasSortingOrder = 100;
+
     [Header("Panels")]
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject hudPanel;
@@ -21,6 +23,7 @@ public sealed class GameUIView : MonoBehaviour
     public void Bind(UISystem uiSystem)
     {
         this.uiSystem = uiSystem;
+        EnsureHudIsVisible();
     }
 
     public void ShowMainMenu()
@@ -31,11 +34,13 @@ public sealed class GameUIView : MonoBehaviour
     public void ShowHUD()
     {
         SetPanels(mainMenu: false, hud: true, pause: false, victory: false, defeat: false);
+        EnsureHudIsVisible();
     }
 
     public void ShowPause()
     {
         SetPanels(mainMenu: false, hud: true, pause: true, victory: false, defeat: false);
+        EnsureHudIsVisible();
     }
 
     public void ShowVictory()
@@ -52,22 +57,22 @@ public sealed class GameUIView : MonoBehaviour
     {
         if (waveText != null)
         {
-            waveText.text = $"Wave {state.waveIndex}/{state.totalWaves}";
+            waveText.text = $"{state.waveIndex}/{state.totalWaves}";
         }
 
         if (enemiesText != null)
         {
-            enemiesText.text = $"Enemies {state.enemiesRemaining}";
+            enemiesText.text = state.enemiesRemaining.ToString();
         }
 
         if (buffText != null)
         {
-            buffText.text = $"Damage +{state.damageBonus}";
+            buffText.text = $"+{state.damageBonus}";
         }
 
         if (projectileText != null)
         {
-            projectileText.text = $"Projectiles {state.projectileCount}";
+            projectileText.text = state.projectileCount.ToString();
         }
     }
 
@@ -111,5 +116,65 @@ public sealed class GameUIView : MonoBehaviour
         {
             panel.SetActive(active);
         }
+    }
+
+    private void EnsureHudIsVisible()
+    {
+        EnsureCanvasOverlay();
+        EnsureFullScreenPanel(hudPanel);
+        ConfigureHudText(waveText, new Vector2(24f, -24f), "0/0");
+        ConfigureHudText(enemiesText, new Vector2(24f, -64f), "0");
+        ConfigureHudText(buffText, new Vector2(24f, -104f), "+0");
+        ConfigureHudText(projectileText, new Vector2(24f, -144f), "1");
+    }
+
+    private void EnsureCanvasOverlay()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null)
+        {
+            return;
+        }
+
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = HudCanvasSortingOrder;
+    }
+
+    private static void EnsureFullScreenPanel(GameObject panel)
+    {
+        if (panel == null || !panel.TryGetComponent(out RectTransform rectTransform))
+        {
+            return;
+        }
+
+        rectTransform.anchorMin = Vector2.zero;
+        rectTransform.anchorMax = Vector2.one;
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
+        rectTransform.localScale = Vector3.one;
+    }
+
+    private static void ConfigureHudText(TMP_Text text, Vector2 anchoredPosition, string fallbackValue)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        text.gameObject.SetActive(true);
+        text.text = string.IsNullOrEmpty(text.text) ? fallbackValue : text.text;
+        text.color = Color.white;
+        text.fontSize = 32f;
+        text.alignment = TextAlignmentOptions.TopLeft;
+        text.raycastTarget = false;
+
+        RectTransform rectTransform = text.rectTransform;
+        rectTransform.anchorMin = new Vector2(0f, 1f);
+        rectTransform.anchorMax = new Vector2(0f, 1f);
+        rectTransform.pivot = new Vector2(0f, 1f);
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = new Vector2(260f, 36f);
+        rectTransform.localScale = Vector3.one;
     }
 }

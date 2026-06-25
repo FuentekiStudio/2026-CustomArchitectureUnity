@@ -11,6 +11,7 @@ public sealed class GameBootstrap : MonoBehaviour
     [SerializeField] private Transform buffWallSpawnPoint;
     [SerializeField] private Transform playerLine;
     [SerializeField] private Transform poolRoot;
+    [SerializeField] private bool startGameOnAwake = true;
 
     private ServiceLocator serviceLocator;
     private GameEventBus eventBus;
@@ -37,6 +38,11 @@ public sealed class GameBootstrap : MonoBehaviour
         BuildSystems();
         RegisterSystems();
         uiSystem.BindView(gameUIView);
+
+        if (startGameOnAwake)
+        {
+            uiSystem.OnPlayRequested();
+        }
     }
 
     private void OnDestroy()
