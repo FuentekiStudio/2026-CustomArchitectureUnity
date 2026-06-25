@@ -1,17 +1,15 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-public class WavesController
+public class WavesController : IUpdateable
 {
-    private int maxWaves;
+    private readonly int maxWaves;
+    private readonly List<Wave> waves;
+    private readonly float newWaveTime;
+    private readonly float textTime;
+
     private int waveCount;
-
     private Wave wave;
-    private List<Wave> waves;
-
-    private float newWaveTime;
     private float currentTime;
-    private float textTime;
     private bool showText;
 
     public int WaveCount => waveCount;
@@ -22,88 +20,70 @@ public class WavesController
         waves = wavesList;
         this.newWaveTime = newWaveTime;
         this.textTime = textTime;
-
         showText = false;
         wave = null;
     }
 
     public void Initialize()
     {
-        //Level.LevelController.OnLevelWin += OnLevelWinHandler;
-
         waveCount = 0;
 
-        foreach (Wave wave in waves)
+        for (int i = 0; i < waves.Count; i++)
         {
-            wave.Initialize();
+            waves[i].Initialize();
         }
-        currentTime = 0;
+
+        currentTime = 0f;
     }
 
-    public void WaveIncomingWarning() // originalmente mostraba un texto diciendo "wave incoming" en la pantalla. Lo dejo por si lo queremos implementar
+    public void WaveIncomingWarning(float deltaTime)
     {
-        if (showText)
+        if (!showText)
         {
-            currentTime += Time.deltaTime;
+            return;
+        }
 
-            if (currentTime < textTime)
-            {
-                //mostrar el texto por un tiempo
-
-            }
-            else
-            {
-                //dejar de mostrarlo
-                showText = false;
-                currentTime = 0;
-            }
+        currentTime += deltaTime;
+        if (currentTime >= textTime)
+        {
+            showText = false;
+            currentTime = 0f;
         }
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
-        if (waveCount < maxWaves)
-        {
-            if (wave == null)
-            {
-                SetNewWave();
-            }
-            else
-            {
-                wave.Update();
+        WaveIncomingWarning(deltaTime);
 
-                if (WaveFinished())
-                {
-                    wave = null;
-                    waveCount++;
-                }
-            }
-        }
-        else
+        if (waveCount >= maxWaves)
         {
-            // Llamado a "ganaste"
+            return;
+        }
+
+        if (wave == null)
+        {
+            SetNewWave(deltaTime);
+            return;
+        }
+
+        wave.Update(deltaTime);
+
+        if (wave.IsWaveCompleted)
+        {
+            wave = null;
+            waveCount++;
         }
     }
 
-    private bool WaveFinished()
+    private void SetNewWave(float deltaTime)
     {
-        return wave.IsWaveCompleted;
-    }
-
-    private void SetNewWave()
-    {
-        // Setear wave con un tiempo de espera
-        currentTime += Time.deltaTime;
+        currentTime += deltaTime;
 
         if (currentTime > newWaveTime)
         {
             wave = waves[waveCount];
             showText = true;
-            currentTime = 0;
+            currentTime = 0f;
         }
-    }
-    private void OnLevelWinHandler()
-    {
-        //GameManager.Instance.SetGameState(GameState.Win);
     }
 }
