@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CustomUpdateManager : MonoBehaviour
 {
@@ -51,7 +50,7 @@ public class CustomUpdateManager : MonoBehaviour
         {
             fixedUpdateables.Remove(fixedUpdatable);
         }
-        fixedUpdateablesToRemove.Clear ();
+        fixedUpdateablesToRemove.Clear();
     }
 
     private void LateUpdate()

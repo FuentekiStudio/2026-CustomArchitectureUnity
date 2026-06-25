@@ -20,7 +20,6 @@ public class EnemiesSpawner : IUpdateable
         CustomUpdateManager customUpdateManager,
         Transform parent, 
         GameObject prefab  
-
         )
     {
         this.SpawnParent = parent;
