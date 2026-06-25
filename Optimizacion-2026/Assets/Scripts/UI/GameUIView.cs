@@ -140,6 +140,12 @@ public sealed class GameUIView : MonoBehaviour
 
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = HudCanvasSortingOrder;
+
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        if (canvasRect != null)
+        {
+            canvasRect.localScale = Vector3.one;
+        }
     }
 
     private static void EnsureFullScreenPanel(GameObject panel)
