@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45caa87680a26754d8a8ae8fb34b7340, type: 3}
+  m_Name: MainGameConfig
+  m_EditorClassIdentifier: Assembly-CSharp::GameConfig
+  player:
+    moveSpeed: 8
+    minHorizontal: -9
+    maxHorizontal: 9
+    baseDamage: 1
+    baseProjectileCount: 1
+    fireRate: 0.2
+  projectile:
+    speed: 16
+    lifetime: 4
+    hitRadius: 0.45
+  spawn:
+    randomXRange: 5
+  lanes:
+    movementAxis: 1
+    enemyMoveDirection: -1
+    buffWallMoveDirection: -1
+    projectileMoveDirection: 1
+    projectileSpread: 0.45
+  pools:
+    entries:
+    - id: 0
+      prefab: {fileID: 5832493356715524014, guid: 87bc168f3f265464cac442e22c90aa65, type: 3}
+      prewarmCount: 16
+    - id: 1
+      prefab: {fileID: 7861432015758005983, guid: c7ee9808246b29f4cade0afc62eb053c, type: 3}
+      prewarmCount: 8
+    - id: 2
+      prefab: {fileID: 6945120636576509202, guid: 94d9ed78b09fde44ba3b99ddb6ab433f, type: 3}
+      prewarmCount: 2
+    - id: 3
+      prefab: {fileID: 834171794331398335, guid: 7cde5a1fef47f4342891007c7f73b56a, type: 3}
+      prewarmCount: 6
+    - id: 4
+      prefab: {fileID: 834171794331398335, guid: 7cde5a1fef47f4342891007c7f73b56a, type: 3}
+      prewarmCount: 6
+    - id: 5
+      prefab: {fileID: 6852009541234005464, guid: 24f6313c38ae27941b4c2f97ab88eecc, type: 3}
+      prewarmCount: 80
+    - id: 6
+      prefab: {fileID: 4910924708346032963, guid: 3cdd56832c7dcfc47b0fbf495c9ddb46, type: 3}
+      prewarmCount: 12
+  waves:
+  - enemies:
+    - type: 1
+      count: 3
+      interval: 1.2
+      health: 3
+      speed: 3
+    buffWalls:
+    - type: 0
+      count: 2
+      interval: 2
+      health: 2
+      speed: 2.5
+      value: 1
+    boss:
+      enabled: 0
+      health: 0
+      speed: 0
+      delay: 0
+    delayBeforeWave: 0.5
+  - enemies:
+    - type: 0
+      count: 6
+      interval: 0.8
+      health: 2
+      speed: 3.5
+    - type: 1
+      count: 2
+      interval: 1.4
+      health: 4
+      speed: 2.8
+    buffWalls:
+    - type: 1
+      count: 2
+      interval: 2.5
+      health: 2
+      speed: 2.5
+      value: 1
+    - type: 0
+      count: 1
+      interval: 3
+      health: 3
+      speed: 2.5
+      value: 1
+    boss:
+      enabled: 1
+      health: 10
+      speed: 2.2
+      delay: 5
+    delayBeforeWave: 1
