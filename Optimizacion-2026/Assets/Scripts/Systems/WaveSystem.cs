@@ -55,20 +55,9 @@ public sealed class WaveSystem : IUpdateable
 
         runtimeWave.Update(deltaTime, spawnSystem);
 
-        if (runtimeWave.IsSpawnComplete && enemySystem.ActiveCount == 0)
+        if (runtimeWave.IsCombatSpawnComplete && enemySystem.ActiveCount == 0)
         {
-            eventBus.Raise(new WaveCompletedEvent(currentWaveIndex + 1));
-            currentWaveIndex++;
-
-            if (currentWaveIndex >= TotalWaves)
-            {
-                gameState.Win();
-            }
-            else
-            {
-                waitingForNextWave = true;
-                waveDelayTimer = 0f;
-            }
+            CompleteCurrentWave();
         }
     }
 
@@ -76,6 +65,7 @@ public sealed class WaveSystem : IUpdateable
     {
         if (currentWaveIndex >= TotalWaves)
         {
+            gameState.Win();
             return;
         }
 
@@ -87,6 +77,22 @@ public sealed class WaveSystem : IUpdateable
     public bool IsFinalWave()
     {
         return currentWaveIndex >= TotalWaves - 1;
+    }
+
+    private void CompleteCurrentWave()
+    {
+        eventBus.Raise(new WaveCompletedEvent(currentWaveIndex + 1));
+        currentWaveIndex++;
+
+        if (currentWaveIndex >= TotalWaves)
+        {
+            gameState.Win();
+            return;
+        }
+
+        waitingForNextWave = true;
+        waveDelayTimer = 0f;
+        runtimeWave = null;
     }
 
     private void UpdateWaveDelay(float deltaTime)
@@ -113,11 +119,11 @@ public sealed class WaveSystem : IUpdateable
             enemyCursor = new SpawnCursor<EnemySpawnData>(config.enemies);
             buffWallCursor = new SpawnCursor<BuffWallSpawnData>(config.buffWalls);
             bossTimer = 0f;
-            bossSpawned = !config.boss.enabled;
+            bossSpawned = !config.megazord.enabled;
         }
 
-        public int TotalEnemies => enemyCursor.TotalCount + (config.boss.enabled ? 1 : 0);
-        public bool IsSpawnComplete => enemyCursor.IsComplete && buffWallCursor.IsComplete && bossSpawned;
+        public int TotalEnemies => enemyCursor.TotalCount + (config.megazord.enabled ? 1 : 0);
+        public bool IsCombatSpawnComplete => enemyCursor.IsComplete && bossSpawned;
 
         public void Update(float deltaTime, SpawnSystem spawnSystem)
         {
@@ -127,15 +133,15 @@ public sealed class WaveSystem : IUpdateable
             if (!bossSpawned)
             {
                 bossTimer += deltaTime;
-                if (bossTimer >= Mathf.Max(0f, config.boss.delay))
+                if (bossTimer >= Mathf.Max(0f, config.megazord.delay))
                 {
                     spawnSystem.SpawnEnemy(new EnemySpawnData
                     {
-                        type = EnemyType.Boss,
+                        type = EnemyType.Megazord,
                         count = 1,
                         interval = 0f,
-                        health = config.boss.health,
-                        speed = config.boss.speed
+                        health = config.megazord.health,
+                        speed = config.megazord.speed
                     });
                     bossSpawned = true;
                 }
@@ -153,6 +159,7 @@ public sealed class WaveSystem : IUpdateable
         public SpawnCursor(T[] entries)
         {
             this.entries = entries ?? System.Array.Empty<T>();
+            timer = float.MaxValue;
         }
 
         public bool IsComplete => entryIndex >= entries.Length;
@@ -212,7 +219,7 @@ public sealed class WaveSystem : IUpdateable
         {
             entryIndex++;
             spawnedFromEntry = 0;
-            timer = 0f;
+            timer = float.MaxValue;
         }
 
         private static int GetCount(T entry)

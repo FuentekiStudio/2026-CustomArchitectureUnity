@@ -68,6 +68,7 @@ public static class MainSceneArchitectureConfigurator
         GameObject enemyPrefab = CreatePrefab("Enemy_Normal", PrimitiveType.Capsule, Color.red, new Vector3(1f, 1f, 1f));
         GameObject elitePrefab = CreatePrefab("Enemy_Elite", PrimitiveType.Capsule, new Color(0.65f, 0f, 0.95f), new Vector3(1.25f, 1.25f, 1.25f));
         GameObject bossPrefab = CreatePrefab("Enemy_Boss", PrimitiveType.Capsule, Color.black, new Vector3(1.8f, 1.8f, 1.8f));
+        GameObject megazordPrefab = CreatePrefab("Enemy_Megazord", PrimitiveType.Capsule, Color.green, new Vector3(10.0f, 10.0f, 10.0f));
         GameObject damageWallPrefab = CreatePrefab("BuffWall_Damage", PrimitiveType.Cube, Color.yellow, new Vector3(1.4f, 1.4f, 0.4f));
         GameObject projectileWallPrefab = CreatePrefab("BuffWall_Projectiles", PrimitiveType.Cube, Color.cyan, new Vector3(1.4f, 1.4f, 0.4f));
         GameObject projectilePrefab = CreatePrefab("Projectile", PrimitiveType.Sphere, Color.white, new Vector3(0.35f, 0.35f, 0.35f));
@@ -105,6 +106,7 @@ public static class MainSceneArchitectureConfigurator
                 new PoolEntry { id = PoolId.EnemyNormal, prefab = enemyPrefab, prewarmCount = 16 },
                 new PoolEntry { id = PoolId.EnemyElite, prefab = elitePrefab, prewarmCount = 8 },
                 new PoolEntry { id = PoolId.EnemyBoss, prefab = bossPrefab, prewarmCount = 2 },
+                new PoolEntry { id = PoolId.MegazordBoss, prefab = megazordPrefab, prewarmCount = 1 },
                 new PoolEntry { id = PoolId.BuffWallDamage, prefab = damageWallPrefab, prewarmCount = 6 },
                 new PoolEntry { id = PoolId.BuffWallProjectileCount, prefab = projectileWallPrefab, prewarmCount = 6 },
                 new PoolEntry { id = PoolId.Projectile, prefab = projectilePrefab, prewarmCount = 80 },
@@ -118,7 +120,8 @@ public static class MainSceneArchitectureConfigurator
                 delayBeforeWave = 0.5f,
                 enemies = new[] { new EnemySpawnData { type = EnemyType.Elite, count = 3, interval = 1.2f, health = 3, speed = 3f } },
                 buffWalls = new[] { new BuffWallSpawnData { type = BuffType.Damage, count = 2, interval = 2f, health = 2, speed = 2.5f, value = 1 } },
-                boss = new BossSpawnData { enabled = false }
+                boss = new BossSpawnData { enabled = false },
+                megazord = new MegazordSpawnData { enabled = false }
             },
             new WaveConfig
             {
@@ -133,7 +136,8 @@ public static class MainSceneArchitectureConfigurator
                     new BuffWallSpawnData { type = BuffType.ProjectileCount, count = 2, interval = 2.5f, health = 2, speed = 2.5f, value = 1 },
                     new BuffWallSpawnData { type = BuffType.Damage, count = 1, interval = 3f, health = 3, speed = 2.5f, value = 1 }
                 },
-                boss = new BossSpawnData { enabled = true, delay = 5f, health = 10, speed = 2.2f }
+                boss = new BossSpawnData { enabled = true, delay = 5f, health = 10, speed = 2.2f },
+                megazord = new MegazordSpawnData { enabled = true, delay = 5f, health = 1000, speed = 1.0f }
             }
         };
         EditorUtility.SetDirty(config);

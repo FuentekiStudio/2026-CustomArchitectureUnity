@@ -56,10 +56,10 @@ public static class MainSceneUiConfigurator
         GameObject victoryPanel = EnsurePanel(rootCanvas.transform, "VictoryPanel", false);
         GameObject defeatPanel = EnsurePanel(rootCanvas.transform, "DefeatPanel", false);
 
-        EnsureStaticHudLabel(hudPanel.transform, "WaveLabel", new Vector2(24f, -24f), "Wave");
-        EnsureStaticHudLabel(hudPanel.transform, "EnemiesLabel", new Vector2(24f, -64f), "Enemies");
-        EnsureStaticHudLabel(hudPanel.transform, "BuffLabel", new Vector2(24f, -104f), "Damage");
-        EnsureStaticHudLabel(hudPanel.transform, "ProjectileLabel", new Vector2(24f, -144f), "Projectiles");
+        EnsureStaticHudLabel(hudPanel.transform, "WaveLabel", new Vector2(24f, -24f), "Wave Number:");
+        EnsureStaticHudLabel(hudPanel.transform, "EnemiesLabel", new Vector2(24f, -64f), "Enemies Left:");
+        EnsureStaticHudLabel(hudPanel.transform, "BuffLabel", new Vector2(24f, -104f), "Damage Bonus:");
+        EnsureStaticHudLabel(hudPanel.transform, "ProjectileLabel", new Vector2(24f, -144f), "Projectiles:");
 
         GameObject dynamicHudCanvasObject = EnsurePanel(hudPanel.transform, "DynamicHUDCanvas", true);
         Canvas dynamicCanvas = dynamicHudCanvasObject.GetComponent<Canvas>();
@@ -74,10 +74,10 @@ public static class MainSceneUiConfigurator
             Object.DestroyImmediate(dynamicHudCanvasObject.GetComponent<GraphicRaycaster>(), true);
         }
 
-        TMP_Text waveText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "WaveText", new Vector2(170f, -24f), "0/0");
-        TMP_Text enemiesText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "EnemiesText", new Vector2(170f, -64f), "0");
-        TMP_Text buffText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "BuffText", new Vector2(170f, -104f), "+0");
-        TMP_Text projectileText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "ProjectileText", new Vector2(170f, -144f), "1");
+        TMP_Text waveText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "WaveText", new Vector2(260f, -24f), "0/0");
+        TMP_Text enemiesText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "EnemiesText", new Vector2(260f, -64f), "0");
+        TMP_Text buffText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "BuffText", new Vector2(260f, -104f), "+0");
+        TMP_Text projectileText = EnsureDynamicHudValue(dynamicHudCanvasObject.transform, "ProjectileText", new Vector2(260f, -144f), "1");
         Button hudPauseButton = EnsureButton(hudPanel.transform, "PauseButton", "Pause", new Vector2(-110f, -42f));
         RectTransform hudPauseRect = hudPauseButton.GetComponent<RectTransform>();
         hudPauseRect.anchorMin = new Vector2(1f, 1f);
@@ -95,12 +95,12 @@ public static class MainSceneUiConfigurator
         Button quitPauseButton = EnsureButton(pausePanel.transform, "QuitButton", "Quit", new Vector2(0f, -120f));
 
         EnsureCenteredTitle(victoryPanel.transform, "VictoryTitle", "Victory", new Vector2(0f, 80f));
-        Button restartVictoryButton = EnsureButton(victoryPanel.transform, "RestartButton", "Restart", new Vector2(0f, 0f));
-        Button quitVictoryButton = EnsureButton(victoryPanel.transform, "QuitButton", "Quit", new Vector2(0f, -80f));
+        Button restartVictoryButton = EnsureButton(victoryPanel.transform, "RestartButton", "Restart Game", new Vector2(0f, 0f));
+        Button quitVictoryButton = EnsureButton(victoryPanel.transform, "QuitButton", "Quit Game", new Vector2(0f, -80f));
 
         EnsureCenteredTitle(defeatPanel.transform, "DefeatTitle", "Defeat", new Vector2(0f, 80f));
-        Button restartDefeatButton = EnsureButton(defeatPanel.transform, "RestartButton", "Restart", new Vector2(0f, 0f));
-        Button quitDefeatButton = EnsureButton(defeatPanel.transform, "QuitButton", "Quit", new Vector2(0f, -80f));
+        Button restartDefeatButton = EnsureButton(defeatPanel.transform, "RestartButton", "Retry Level", new Vector2(0f, 0f));
+        Button quitDefeatButton = EnsureButton(defeatPanel.transform, "QuitButton", "Quit Game", new Vector2(0f, -80f));
 
         ReplacePersistentListener(hudPauseButton.onClick, view.OnPausePressed);
         ReplacePersistentListener(playButton.onClick, view.OnPlayPressed);

@@ -5,7 +5,8 @@ public enum EnemyType
 {
     Normal,
     Elite,
-    Boss
+    Boss,
+    Megazord
 }
 
 public enum BuffType
@@ -34,6 +35,7 @@ public enum PoolId
     EnemyNormal,
     EnemyElite,
     EnemyBoss,
+    MegazordBoss,
     BuffWallDamage,
     BuffWallProjectileCount,
     Projectile,
@@ -143,6 +145,7 @@ public sealed class WaveConfig
     public EnemySpawnData[] enemies = Array.Empty<EnemySpawnData>();
     public BuffWallSpawnData[] buffWalls = Array.Empty<BuffWallSpawnData>();
     public BossSpawnData boss;
+    public MegazordSpawnData megazord;
     public float delayBeforeWave = 1f;
 }
 
@@ -158,6 +161,14 @@ public struct EnemySpawnData
 
 [Serializable]
 public struct BossSpawnData
+{
+    public bool enabled;
+    public int health;
+    public float speed;
+    public float delay;
+}
+[Serializable]
+public struct MegazordSpawnData
 {
     public bool enabled;
     public int health;

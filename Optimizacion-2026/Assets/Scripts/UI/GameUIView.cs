@@ -12,7 +12,7 @@ public sealed class GameUIView : MonoBehaviour
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
 
-    [Header("HUD")]
+    [Header("HUD Dynamic Values")]
     [SerializeField] private TMP_Text waveText;
     [SerializeField] private TMP_Text enemiesText;
     [SerializeField] private TMP_Text buffText;
@@ -23,7 +23,7 @@ public sealed class GameUIView : MonoBehaviour
     public void Bind(UISystem uiSystem)
     {
         this.uiSystem = uiSystem;
-        EnsureHudIsVisible();
+        EnsureAssignedLayout();
     }
 
     public void ShowMainMenu()
@@ -34,23 +34,25 @@ public sealed class GameUIView : MonoBehaviour
     public void ShowHUD()
     {
         SetPanels(mainMenu: false, hud: true, pause: false, victory: false, defeat: false);
-        EnsureHudIsVisible();
+        EnsureAssignedLayout();
     }
 
     public void ShowPause()
     {
         SetPanels(mainMenu: false, hud: true, pause: true, victory: false, defeat: false);
-        EnsureHudIsVisible();
+        EnsureAssignedLayout();
     }
 
     public void ShowVictory()
     {
         SetPanels(mainMenu: false, hud: false, pause: false, victory: true, defeat: false);
+        EnsureAssignedLayout();
     }
 
     public void ShowDefeat()
     {
         SetPanels(mainMenu: false, hud: false, pause: false, victory: false, defeat: true);
+        EnsureAssignedLayout();
     }
 
     public void RenderHud(HudState state)
@@ -118,14 +120,14 @@ public sealed class GameUIView : MonoBehaviour
         }
     }
 
-    private void EnsureHudIsVisible()
+    private void EnsureAssignedLayout()
     {
         EnsureCanvasOverlay();
         EnsureFullScreenPanel(hudPanel);
-        ConfigureHudText(waveText, new Vector2(24f, -24f), "0/0");
-        ConfigureHudText(enemiesText, new Vector2(24f, -64f), "0");
-        ConfigureHudText(buffText, new Vector2(24f, -104f), "+0");
-        ConfigureHudText(projectileText, new Vector2(24f, -144f), "1");
+        EnsureFullScreenPanel(mainMenuPanel);
+        EnsureFullScreenPanel(pausePanel);
+        EnsureFullScreenPanel(victoryPanel);
+        EnsureFullScreenPanel(defeatPanel);
     }
 
     private void EnsureCanvasOverlay()
@@ -138,6 +140,12 @@ public sealed class GameUIView : MonoBehaviour
 
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = HudCanvasSortingOrder;
+
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        if (canvasRect != null)
+        {
+            canvasRect.localScale = Vector3.one;
+        }
     }
 
     private static void EnsureFullScreenPanel(GameObject panel)
@@ -152,29 +160,6 @@ public sealed class GameUIView : MonoBehaviour
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
-        rectTransform.localScale = Vector3.one;
-    }
-
-    private static void ConfigureHudText(TMP_Text text, Vector2 anchoredPosition, string fallbackValue)
-    {
-        if (text == null)
-        {
-            return;
-        }
-
-        text.gameObject.SetActive(true);
-        text.text = string.IsNullOrEmpty(text.text) ? fallbackValue : text.text;
-        text.color = Color.white;
-        text.fontSize = 32f;
-        text.alignment = TextAlignmentOptions.TopLeft;
-        text.raycastTarget = false;
-
-        RectTransform rectTransform = text.rectTransform;
-        rectTransform.anchorMin = new Vector2(0f, 1f);
-        rectTransform.anchorMax = new Vector2(0f, 1f);
-        rectTransform.pivot = new Vector2(0f, 1f);
-        rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(260f, 36f);
         rectTransform.localScale = Vector3.one;
     }
 }
