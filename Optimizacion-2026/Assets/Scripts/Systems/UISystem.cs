@@ -1,4 +1,8 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.Events;
 
 public sealed class UISystem : IUpdateable
 {
@@ -12,6 +16,12 @@ public sealed class UISystem : IUpdateable
     private HudState hudState;
     private GameUIView view;
     private bool dirty;
+
+
+    private List<GameObject> activeButtons = new List<GameObject>();
+    private List<GameObject> deactiveButtons = new List<GameObject>();
+
+    private int buttonPoolSize = 5;
 
     public UISystem(GameStateSystem gameState, IGameEventBus eventBus)
     {
@@ -27,6 +37,70 @@ public sealed class UISystem : IUpdateable
         eventBus.Register(buffAppliedBinding);
         eventBus.Register(gameEndedBinding);
         eventBus.Register(restartedBinding);
+
+
+    }
+
+    public void InitButtons()
+    {
+
+        for (int i = 0; i < buttonPoolSize; i++)
+        {
+            GameObject button = Object.Instantiate(view.PrefabButton, view.transform);
+            button.SetActive(false);
+            deactiveButtons.Add(button);
+        }
+    }
+
+    public Button GetButton()
+    {
+        if (deactiveButtons.Count > 0)
+        {
+            Button button = deactiveButtons[0].GetComponent<Button>();
+            deactiveButtons.RemoveAt(0);
+            activeButtons.Add(button.gameObject);
+            button.gameObject.SetActive(true);
+            return button;
+        }
+        else
+        {
+            CLogger.Log("No more buttons available in the pool. patatas");
+            return null;
+        }
+    }
+
+    public Button SetUpButton(string buttonText, UnityAction onClickAction, Transform parentTransform)
+    {
+        Button button = GetButton();
+        if (button != null)
+        {
+            TextMeshProUGUI buttonTextComponent = button.GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonTextComponent != null)
+            {
+                buttonTextComponent.text = buttonText;
+            }
+            else
+            {
+                CLogger.Log("Button prefab is missing a TextMeshProUGUI component.");
+            }
+
+            button.onClick.AddListener(onClickAction);
+            button.transform.SetParent(parentTransform, false);
+        }
+        return button;
+    }
+
+    public void ReturnButton(Button button)
+    {
+        if (activeButtons.Contains(button.gameObject))
+        {
+
+            button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
+            activeButtons.Remove(button.gameObject);
+            deactiveButtons.Add(button.gameObject);
+        }
+
     }
 
     public void BindView(GameUIView view)
@@ -36,6 +110,8 @@ public sealed class UISystem : IUpdateable
         {
             view.Bind(this);
             view.ShowMainMenu();
+            InitButtons();
+
         }
     }
 

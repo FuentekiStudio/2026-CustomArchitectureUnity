@@ -1,4 +1,7 @@
 using TMPro;
+using UnityEngine.UI;
+
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class GameUIView : MonoBehaviour
@@ -17,6 +20,12 @@ public sealed class GameUIView : MonoBehaviour
     [SerializeField] private TMP_Text enemiesText;
     [SerializeField] private TMP_Text buffText;
     [SerializeField] private TMP_Text projectileText;
+
+    [Header("The Button")]
+    [SerializeField] private GameObject prefabButton;
+
+    public GameObject PrefabButton => prefabButton;
+    private List<Button> activeButtons = new List<Button>();
 
     private UISystem uiSystem;
 
@@ -39,6 +48,12 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowPause()
     {
+        activeButtons.Add( uiSystem.SetUpButton("Resume", OnResumePressed, pausePanel.transform) ) ;
+        activeButtons.Add(uiSystem.SetUpButton("Restart", OnRestartPressed, pausePanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit", OnQuitPressed, pausePanel.transform));
+
+
+
         SetPanels(mainMenu: false, hud: true, pause: true, victory: false, defeat: false);
         EnsureAssignedLayout();
     }
