@@ -4,6 +4,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Vista MonoBehaviour conectada al Canvas. Expone paneles, textos y botones para que UISystem los controle.
+/// </summary>
 public sealed class GameUIView : MonoBehaviour
 {
     private const int HudCanvasSortingOrder = 100;
@@ -29,17 +32,26 @@ public sealed class GameUIView : MonoBehaviour
 
     private UISystem uiSystem;
 
+    /// <summary>
+    /// Recibe el UISystem que responderá a los callbacks de botones.
+    /// </summary>
     public void Bind(UISystem uiSystem)
     {
         this.uiSystem = uiSystem;
         EnsureAssignedLayout();
     }
 
+    /// <summary>
+    /// Muestra el menú inicial y oculta los demás paneles.
+    /// </summary>
     public void ShowMainMenu()
     {
         SetPanels(mainMenu: true, hud: false, pause: false, victory: false, defeat: false);
     }
 
+    /// <summary>
+    /// Muestra el HUD de gameplay y limpia botones dinámicos activos.
+    /// </summary>
     public void ShowHUD()
     {
         ClearActiveButtons(activeButtons, uiSystem);
@@ -51,6 +63,9 @@ public sealed class GameUIView : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Muestra pausa y crea botones de Resume, Restart y Quit desde el pool de UI.
+    /// </summary>
     public void ShowPause()
     {
         ClearActiveButtons(activeButtons, uiSystem);
@@ -63,6 +78,9 @@ public sealed class GameUIView : MonoBehaviour
         EnsureAssignedLayout();
     }
 
+    /// <summary>
+    /// Muestra pantalla de victoria con botones de reinicio y salida.
+    /// </summary>
     public void ShowVictory()
     {
         ClearActiveButtons(activeButtons, uiSystem);
@@ -74,9 +92,11 @@ public sealed class GameUIView : MonoBehaviour
         EnsureAssignedLayout();
     }
 
+    /// <summary>
+    /// Muestra pantalla de derrota con botones de reinicio y salida.
+    /// </summary>
     public void ShowDefeat()
     {
-        //CLogger.Log("GameUIView: ShowDefeat called");
         ClearActiveButtons(activeButtons, uiSystem);
 
         activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, defeatPanel.transform));
@@ -86,6 +106,9 @@ public sealed class GameUIView : MonoBehaviour
         EnsureAssignedLayout();
     }
 
+    /// <summary>
+    /// Escribe los valores dinámicos del HUD a partir del estado calculado por UISystem.
+    /// </summary>
     public void RenderHud(HudState state)
     {
         if (waveText != null)
@@ -109,31 +132,49 @@ public sealed class GameUIView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Callback del botón Play configurado en la escena.
+    /// </summary>
     public void OnPlayPressed()
     {
         uiSystem?.OnPlayRequested();
     }
 
+    /// <summary>
+    /// Callback de botones de reinicio.
+    /// </summary>
     public void OnRestartPressed()
     {
         uiSystem?.OnRestartRequested();
     }
 
+    /// <summary>
+    /// Callback del botón Resume.
+    /// </summary>
     public void OnResumePressed()
     {
         uiSystem?.OnResumeRequested();
     }
 
+    /// <summary>
+    /// Callback del botón Pause si existe en la escena.
+    /// </summary>
     public void OnPausePressed()
     {
         uiSystem?.OnPauseRequested();
     }
 
+    /// <summary>
+    /// Callback de botones de salida.
+    /// </summary>
     public void OnQuitPressed()
     {
         uiSystem?.OnQuitRequested();
     }
 
+    /// <summary>
+    /// Activa exactamente los paneles solicitados para cada estado de UI.
+    /// </summary>
     private void SetPanels(bool mainMenu, bool hud, bool pause, bool victory, bool defeat)
     {
         SetActive(mainMenuPanel, mainMenu);
@@ -143,6 +184,9 @@ public sealed class GameUIView : MonoBehaviour
         SetActive(defeatPanel, defeat);
     }
 
+    /// <summary>
+    /// Activa o desactiva un panel si la referencia existe.
+    /// </summary>
     private static void SetActive(GameObject panel, bool active)
     {
         if (panel != null)
@@ -151,6 +195,9 @@ public sealed class GameUIView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Normaliza Canvas y paneles asignados para que ocupen pantalla completa.
+    /// </summary>
     private void EnsureAssignedLayout()
     {
         EnsureCanvasOverlay();
@@ -161,6 +208,9 @@ public sealed class GameUIView : MonoBehaviour
         EnsureFullScreenPanel(defeatPanel);
     }
 
+    /// <summary>
+    /// Asegura que el Canvas principal se renderice en Screen Space Overlay.
+    /// </summary>
     private void EnsureCanvasOverlay()
     {
         Canvas canvas = GetComponentInParent<Canvas>();
@@ -179,6 +229,9 @@ public sealed class GameUIView : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ajusta anclas y offsets de un panel para cubrir todo el Canvas.
+    /// </summary>
     private static void EnsureFullScreenPanel(GameObject panel)
     {
         if (panel == null || !panel.TryGetComponent(out RectTransform rectTransform))
@@ -194,6 +247,9 @@ public sealed class GameUIView : MonoBehaviour
         rectTransform.localScale = Vector3.one;
     }
 
+    /// <summary>
+    /// Devuelve al pool los botones dinámicos que estaban visibles.
+    /// </summary>
     private static void ClearActiveButtons(List<Button> activeButtons, UISystem uiSystem)
     {
         for (int i = 0; i < activeButtons.Count; i++)

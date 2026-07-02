@@ -4,19 +4,32 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
+/// <summary>
+/// Servicio de tiempo usado por GameStateSystem para pausar y consultar tiempos de Unity desde clases puras.
+/// </summary>
 public sealed class TimeService
 {
     public float DeltaTime => Time.deltaTime;
     public float FixedDeltaTime => Time.fixedDeltaTime;
 
+    /// <summary>
+    /// Cambia Time.timeScale para pausar o reanudar la simulación de Unity.
+    /// </summary>
     public void SetPaused(bool paused)
     {
         Time.timeScale = paused ? 0f : 1f;
     }
 }
 
+/// <summary>
+/// Servicio de entrada que abstrae teclado y mouse para PlayerSystem.
+/// Soporta Input System nuevo y Legacy Input si están habilitados.
+/// </summary>
 public sealed class InputSystemService
 {
+    /// <summary>
+    /// Devuelve el eje lateral del jugador usando A/D o flechas.
+    /// </summary>
     public float GetHorizontal()
     {
         float keyboard = 0f;
@@ -52,6 +65,9 @@ public sealed class InputSystemService
         return Mathf.Clamp(keyboard, -1f, 1f);
     }
 
+    /// <summary>
+    /// Indica si el jugador está disparando con click izquierdo o barra espaciadora.
+    /// </summary>
     public bool IsShooting()
     {
         bool shooting = false;
@@ -70,6 +86,9 @@ public sealed class InputSystemService
         return shooting;
     }
 
+    /// <summary>
+    /// Indica si se presionó Escape durante este frame.
+    /// </summary>
     public bool PausePressed()
     {
         bool pressed = false;
@@ -87,10 +106,16 @@ public sealed class InputSystemService
     }
 }
 
+/// <summary>
+/// Tabla que relaciona Colliders de Unity con entidades runtime. La usa CollisionSystem para resolver impactos.
+/// </summary>
 public sealed class PhysicsRegistry
 {
     private readonly Dictionary<Collider, EntityRef> colliderToEntity = new Dictionary<Collider, EntityRef>();
 
+    /// <summary>
+    /// Asocia un collider activo con una entidad de gameplay.
+    /// </summary>
     public void Register(Collider collider, EntityRef entity)
     {
         if (collider != null)
@@ -99,6 +124,9 @@ public sealed class PhysicsRegistry
         }
     }
 
+    /// <summary>
+    /// Quita la asociación de un collider cuando la entidad se recicla.
+    /// </summary>
     public void Unregister(Collider collider)
     {
         if (collider != null)
@@ -107,21 +135,33 @@ public sealed class PhysicsRegistry
         }
     }
 
+    /// <summary>
+    /// Busca qué entidad runtime pertenece al collider detectado por física.
+    /// </summary>
     public bool Resolve(Collider collider, out EntityRef entity)
     {
         return colliderToEntity.TryGetValue(collider, out entity);
     }
 
+    /// <summary>
+    /// Limpia todas las asociaciones de colliders al reiniciar gameplay.
+    /// </summary>
     public void Clear()
     {
         colliderToEntity.Clear();
     }
 }
 
+/// <summary>
+/// Servicio de pools usado por SpawnSystem y sistemas de reciclado para evitar Instantiate/Destroy durante gameplay.
+/// </summary>
 public sealed class PoolService
 {
     private readonly Dictionary<PoolId, GenericPooler> pools = new Dictionary<PoolId, GenericPooler>();
 
+    /// <summary>
+    /// Crea los pools declarados en GameConfig y precarga sus objetos bajo poolRoot.
+    /// </summary>
     public void Prewarm(GameConfig config, Transform poolRoot)
     {
         if (config == null || config.pools == null || config.pools.entries == null)
@@ -145,6 +185,9 @@ public sealed class PoolService
         }
     }
 
+    /// <summary>
+    /// Obtiene un objeto inactivo del pool indicado.
+    /// </summary>
     public IPoolable Get(PoolId poolId)
     {
         if (!pools.TryGetValue(poolId, out GenericPooler pool))
@@ -156,6 +199,9 @@ public sealed class PoolService
         return pool.getObj();
     }
 
+    /// <summary>
+    /// Devuelve un objeto activo a su pool o lo desactiva si el pool no existe.
+    /// </summary>
     public void Return(PoolId poolId, IPoolable poolable)
     {
         if (poolable == null)
@@ -173,6 +219,9 @@ public sealed class PoolService
         }
     }
 
+    /// <summary>
+    /// Devuelve todos los objetos activos de todos los pools.
+    /// </summary>
     public void ReturnAll()
     {
         foreach (GenericPooler pool in pools.Values)
@@ -182,11 +231,17 @@ public sealed class PoolService
     }
 }
 
+/// <summary>
+/// Adaptador que permite tratar un GameObject de Unity como objeto pooleable.
+/// </summary>
 public sealed class PoolableGameObject : IPoolable
 {
     private readonly GameObject prefab;
     private readonly GameObject instance;
 
+    /// <summary>
+    /// Crea el wrapper usado como plantilla para instanciar objetos del pool.
+    /// </summary>
     public PoolableGameObject(GameObject prefab)
     {
         this.prefab = prefab;
@@ -201,11 +256,17 @@ public sealed class PoolableGameObject : IPoolable
 
     public GameObject Instance => instance;
 
+    /// <summary>
+    /// Devuelve el prefab usado para crear instancias del pool.
+    /// </summary>
     public GameObject getPrefab()
     {
         return prefab;
     }
 
+    /// <summary>
+    /// Activa la instancia asociada en escena.
+    /// </summary>
     public void Activate()
     {
         if (instance != null)
@@ -214,6 +275,9 @@ public sealed class PoolableGameObject : IPoolable
         }
     }
 
+    /// <summary>
+    /// Desactiva la instancia asociada en escena.
+    /// </summary>
     public void Deactivate()
     {
         if (instance != null)
@@ -222,6 +286,9 @@ public sealed class PoolableGameObject : IPoolable
         }
     }
 
+    /// <summary>
+    /// Crea el wrapper correspondiente para una nueva instancia generada por GenericPooler.
+    /// </summary>
     public IPoolable getNewControllerInstance(GameObject newObject)
     {
         return new PoolableGameObject(prefab, newObject);

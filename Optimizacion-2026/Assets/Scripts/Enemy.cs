@@ -4,6 +4,9 @@ using UnityEngine;
 
 
 
+/// <summary>
+/// Controlador de enemigo del prototipo inicial. El flujo principal actual usa EnemyEntity, EnemySystem y SpawnSystem.
+/// </summary>
 public class Enemy : IFixedUpdateable, IPoolable
 {
     private CustomUpdateManager customUpdateManager;
@@ -12,6 +15,9 @@ public class Enemy : IFixedUpdateable, IPoolable
 
     public float speed = 1.0f;
 
+    /// <summary>
+    /// Recibe el update manager, el GameObject controlado y el spawner que define su posición inicial.
+    /// </summary>
     public Enemy(
                 CustomUpdateManager customUpdateManager,
                 GameObject selfObject,
@@ -22,6 +28,9 @@ public class Enemy : IFixedUpdateable, IPoolable
         this.spawner = spawner;
 
     }
+    /// <summary>
+    /// Mueve este enemigo del prototipo inicial hacia atrás en el eje Z.
+    /// </summary>
     public void FixedUpdate(float deltaTime)
     {
         float newZ = selfObject.transform.position.z - deltaTime * speed;
@@ -32,21 +41,33 @@ public class Enemy : IFixedUpdateable, IPoolable
             );
     }
 
+    /// <summary>
+    /// Crea un controlador para una nueva instancia del pool usado por el prototipo inicial.
+    /// </summary>
     public IPoolable getNewControllerInstance(GameObject newObject)
     {
-        return new Enemy(customUpdateManager, newObject, spawner);// devuelvo un nuevo controllador para un nuevo prefab
+        return new Enemy(customUpdateManager, newObject, spawner);// Devuelve un controlador nuevo para la instancia del prefab.
     }
 
+    /// <summary>
+    /// Devuelve el prefab o GameObject asociado a este controlador del prototipo inicial.
+    /// </summary>
     public GameObject getPrefab()
     {
-        return selfObject;//devuelvo el prefab del objeto
+        return selfObject;// Devuelve el prefab u objeto base asociado.
     }
+    /// <summary>
+    /// Reposiciona, registra en FixedUpdate y activa este enemigo del prototipo inicial.
+    /// </summary>
     public void Activate()
     {
         selfObject.transform.position = spawner.getRandomSpawnPoint();
         customUpdateManager.RegisterFixedUpdateable(this);
         selfObject.SetActive(true);
     }
+    /// <summary>
+    /// Desregistra del FixedUpdate y desactiva este enemigo del prototipo inicial.
+    /// </summary>
     public void Deactivate()
     {
         customUpdateManager.UnregisterFixedUpdateable(this);

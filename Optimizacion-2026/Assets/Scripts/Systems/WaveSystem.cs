@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Sistema de waves. Decide cuándo iniciar waves, spawnear enemigos/paredes y declarar victoria.
+/// Lo actualiza CustomUpdateManager en Update.
+/// </summary>
 public sealed class WaveSystem : IUpdateable
 {
     private readonly GameConfig config;
@@ -13,6 +17,9 @@ public sealed class WaveSystem : IUpdateable
     private bool waitingForNextWave;
     private RuntimeWave runtimeWave;
 
+    /// <summary>
+    /// Recibe configuración, spawner, enemigos activos, estado global y bus de eventos.
+    /// </summary>
     public WaveSystem(GameConfig config, SpawnSystem spawnSystem, EnemySystem enemySystem, GameStateSystem gameState, IGameEventBus eventBus)
     {
         this.config = config;
@@ -26,6 +33,9 @@ public sealed class WaveSystem : IUpdateable
     public int CurrentWaveIndex => currentWaveIndex;
     public int TotalWaves => config != null && config.waves != null ? config.waves.Length : 0;
 
+    /// <summary>
+    /// Vuelve el sistema a la primera wave y limpia el runtime actual.
+    /// </summary>
     public void Reset()
     {
         currentWaveIndex = 0;
@@ -34,6 +44,9 @@ public sealed class WaveSystem : IUpdateable
         runtimeWave = null;
     }
 
+    /// <summary>
+    /// Avanza timers de waves, ejecuta spawns y completa la wave cuando no quedan enemigos.
+    /// </summary>
     public void Update(float deltaTime)
     {
         if (!gameState.IsGameplayRunning)
@@ -61,6 +74,9 @@ public sealed class WaveSystem : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Crea la wave runtime actual y publica el evento de inicio de wave.
+    /// </summary>
     public void StartNextWave()
     {
         if (currentWaveIndex >= TotalWaves)
@@ -74,11 +90,17 @@ public sealed class WaveSystem : IUpdateable
         eventBus.Raise(new WaveStartedEvent(currentWaveIndex + 1, TotalWaves, runtimeWave.TotalEnemies));
     }
 
+    /// <summary>
+    /// Indica si el índice actual corresponde a la última wave configurada.
+    /// </summary>
     public bool IsFinalWave()
     {
         return currentWaveIndex >= TotalWaves - 1;
     }
 
+    /// <summary>
+    /// Publica fin de wave y decide si avanzar a la siguiente o declarar victoria.
+    /// </summary>
     private void CompleteCurrentWave()
     {
         eventBus.Raise(new WaveCompletedEvent(currentWaveIndex + 1));
@@ -95,6 +117,9 @@ public sealed class WaveSystem : IUpdateable
         runtimeWave = null;
     }
 
+    /// <summary>
+    /// Espera la demora configurada antes de iniciar la siguiente wave.
+    /// </summary>
     private void UpdateWaveDelay(float deltaTime)
     {
         WaveConfig wave = config.waves[currentWaveIndex];
@@ -105,6 +130,9 @@ public sealed class WaveSystem : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Estado temporal de una wave en ejecución. Administra cursores de spawn y jefe Megazord.
+    /// </summary>
     private sealed class RuntimeWave
     {
         private readonly WaveConfig config;
@@ -113,6 +141,9 @@ public sealed class WaveSystem : IUpdateable
         private float bossTimer;
         private bool bossSpawned;
 
+        /// <summary>
+        /// Inicializa los cursores de enemigos y paredes a partir de la configuración de wave.
+        /// </summary>
         public RuntimeWave(WaveConfig config)
         {
             this.config = config;
@@ -125,6 +156,9 @@ public sealed class WaveSystem : IUpdateable
         public int TotalEnemies => enemyCursor.TotalCount + (config.megazord.enabled ? 1 : 0);
         public bool IsCombatSpawnComplete => enemyCursor.IsComplete && bossSpawned;
 
+        /// <summary>
+        /// Actualiza spawns regulares y dispara el jefe especial cuando vence su demora.
+        /// </summary>
         public void Update(float deltaTime, SpawnSystem spawnSystem)
         {
             enemyCursor.Update(deltaTime, data => spawnSystem.SpawnEnemy(data));
@@ -149,6 +183,9 @@ public sealed class WaveSystem : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Cursor genérico que recorre entradas de spawn y respeta cantidad e intervalo configurados.
+    /// </summary>
     private sealed class SpawnCursor<T>
     {
         private readonly T[] entries;
@@ -156,6 +193,9 @@ public sealed class WaveSystem : IUpdateable
         private int spawnedFromEntry;
         private float timer;
 
+        /// <summary>
+        /// Recibe la lista de entradas de spawn que debe procesar en orden.
+        /// </summary>
         public SpawnCursor(T[] entries)
         {
             this.entries = entries ?? System.Array.Empty<T>();
@@ -184,6 +224,9 @@ public sealed class WaveSystem : IUpdateable
             }
         }
 
+        /// <summary>
+        /// Avanza el timer y ejecuta el callback de spawn cuando corresponde.
+        /// </summary>
         public void Update(float deltaTime, System.Action<T> spawn)
         {
             if (IsComplete)
@@ -215,6 +258,9 @@ public sealed class WaveSystem : IUpdateable
             }
         }
 
+        /// <summary>
+        /// Avanza a la siguiente entrada y reinicia contadores internos.
+        /// </summary>
         private void MoveNextEntry()
         {
             entryIndex++;
@@ -222,6 +268,9 @@ public sealed class WaveSystem : IUpdateable
             timer = float.MaxValue;
         }
 
+        /// <summary>
+        /// Obtiene la cantidad de spawns definida por la entrada actual.
+        /// </summary>
         private static int GetCount(T entry)
         {
             if (entry is EnemySpawnData enemy)
@@ -237,6 +286,9 @@ public sealed class WaveSystem : IUpdateable
             return 0;
         }
 
+        /// <summary>
+        /// Obtiene el intervalo entre spawns definido por la entrada actual.
+        /// </summary>
         private static float GetInterval(T entry)
         {
             if (entry is EnemySpawnData enemy)

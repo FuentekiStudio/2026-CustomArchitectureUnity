@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Spawner de enemigos del prototipo inicial. El flujo principal actual usa WaveSystem, SpawnSystem y EnemySystem.
+/// </summary>
 public class EnemiesSpawner : IUpdateable
 {
     private CustomUpdateManager customUpdateManager;
@@ -16,6 +19,9 @@ public class EnemiesSpawner : IUpdateable
     private float rangeSpawnPoint = 5.0f;
 
 
+    /// <summary>
+    /// Configura un GenericPooler propio del prototipo inicial y se registra en el CustomUpdateManager.
+    /// </summary>
     public EnemiesSpawner(
         CustomUpdateManager customUpdateManager,
         Transform parent, 
@@ -30,17 +36,20 @@ public class EnemiesSpawner : IUpdateable
         baseEnemyController = new Enemy(customUpdateManager, prefab, this);
 
         EnemiesPool = new GenericPooler(this.SpawnParent, baseEnemyController);
-        EnemiesPool.SetUp();//come muchos frames?? veremos
+        EnemiesPool.SetUp();// Precarga este pool del prototipo inicial antes de empezar a spawnear.
 
         customUpdateManager.RegisterUpdateable(this);
     
     }
 
+    /// <summary>
+    /// Spawnea un enemigo del prototipo inicial cada vez que vence el timer.
+    /// </summary>
     public void Update(float deltatime)
     {
         if (Time.time - lastSpawnTime > timerSpawn)
         {
-            //CLogger.Log("patata");
+            // Log opcional para depurar cada spawn del prototipo inicial.
             lastSpawnTime = Time.time;
             IPoolable newEnemy =  EnemiesPool.getObj();
             newEnemy.Activate();
@@ -48,6 +57,9 @@ public class EnemiesSpawner : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Calcula una posición aleatoria alrededor del punto padre de spawn.
+    /// </summary>
     public Vector3 getRandomSpawnPoint()
     {
         float spawnXoffset = Random.Range(-rangeSpawnPoint, rangeSpawnPoint);

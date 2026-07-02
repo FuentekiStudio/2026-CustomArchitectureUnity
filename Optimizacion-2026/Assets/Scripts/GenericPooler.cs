@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contrato que debe cumplir cualquier objeto administrado por GenericPooler.
+/// </summary>
 public interface IPoolable
 {
     public GameObject getPrefab();
@@ -9,6 +12,9 @@ public interface IPoolable
     public IPoolable getNewControllerInstance(GameObject newObject);
 }
 
+/// <summary>
+/// Pool genérico de objetos IPoolable. Lo usa PoolService para reciclar prefabs durante gameplay.
+/// </summary>
 public class GenericPooler
 {
     private readonly IPoolable objectToPool;
@@ -19,6 +25,9 @@ public class GenericPooler
 
     public int startAmount = 10;
 
+    /// <summary>
+    /// Recibe la plantilla a clonar, el padre de escena y la cantidad inicial del pool.
+    /// </summary>
     public GenericPooler(Transform parent, IPoolable objectToPool, int startAmount = 10)
     {
         this.objectToPool = objectToPool;
@@ -28,6 +37,9 @@ public class GenericPooler
         this.startAmount = startAmount;
     }
 
+    /// <summary>
+    /// Instancia y desactiva todos los objetos iniciales del pool.
+    /// </summary>
     public void SetUp()
     {
         for (int i = 0; i < startAmount; i++)
@@ -39,6 +51,9 @@ public class GenericPooler
         }
     }
 
+    /// <summary>
+    /// Entrega un objeto inactivo y lo mueve a la lista de activos.
+    /// </summary>
     public IPoolable getObj()
     {
         IPoolable poolObj;
@@ -62,6 +77,9 @@ public class GenericPooler
         return poolObj;
     }
 
+    /// <summary>
+    /// Desactiva un objeto y lo devuelve a la lista de disponibles.
+    /// </summary>
     public void returnToPool(IPoolable poolObj)
     {
         if (poolObj == null)
@@ -78,6 +96,9 @@ public class GenericPooler
         }
     }
 
+    /// <summary>
+    /// Devuelve todos los objetos activos al pool.
+    /// </summary>
     public void ReturnAll()
     {
         for (int i = activeObjects.Count - 1; i >= 0; i--)

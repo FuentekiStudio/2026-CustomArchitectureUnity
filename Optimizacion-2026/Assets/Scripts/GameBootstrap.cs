@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityServiceLocator;
 
+/// <summary>
+/// Punto de entrada de la escena. Inicializa servicios, sistemas y pools desde las referencias asignadas en el Inspector.
+/// Lo usa Unity mediante Awake y no contiene lógica de gameplay por frame.
+/// </summary>
 public sealed class GameBootstrap : MonoBehaviour
 {
     [SerializeField] private CustomUpdateManager updateManager;
@@ -31,6 +35,9 @@ public sealed class GameBootstrap : MonoBehaviour
     private TimeService timeService;
     private InputSystemService inputService;
 
+    /// <summary>
+    /// Valida referencias de escena, construye servicios y registra los sistemas en el CustomUpdateManager.
+    /// </summary>
     private void Awake()
     {
         if (!ResolveSceneReferences())
@@ -49,6 +56,9 @@ public sealed class GameBootstrap : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Libera suscripciones, servicios y sistemas cuando se destruye la escena o el objeto bootstrap.
+    /// </summary>
     private void OnDestroy()
     {
         playerSystem?.Dispose();
@@ -58,6 +68,9 @@ public sealed class GameBootstrap : MonoBehaviour
         updateManager?.Clear();
     }
 
+    /// <summary>
+    /// Comprueba que todas las referencias requeridas estén asignadas antes de iniciar la arquitectura.
+    /// </summary>
     private bool ResolveSceneReferences()
     {
         bool valid = true;
@@ -78,6 +91,9 @@ public sealed class GameBootstrap : MonoBehaviour
         return valid;
     }
 
+    /// <summary>
+    /// Valida una referencia individual y reporta el campo faltante en consola.
+    /// </summary>
     private bool ValidateReference(Object reference, string fieldName)
     {
         if (reference != null)
@@ -89,6 +105,9 @@ public sealed class GameBootstrap : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Crea servicios transversales como EventBus, pools, input, tiempo y registro de física.
+    /// </summary>
     private void BuildServices()
     {
         serviceLocator = new ServiceLocator();
@@ -108,6 +127,9 @@ public sealed class GameBootstrap : MonoBehaviour
             .Register(inputService);
     }
 
+    /// <summary>
+    /// Construye los sistemas C# puros y les pasa las dependencias que necesitan por constructor.
+    /// </summary>
     private void BuildSystems()
     {
         gameStateSystem = new GameStateSystem(eventBus, timeService, poolService, ResetGameplay);
@@ -150,6 +172,9 @@ public sealed class GameBootstrap : MonoBehaviour
             .Register(uiSystem);
     }
 
+    /// <summary>
+    /// Registra cada sistema en la etapa correcta del loop centralizado: Update, FixedUpdate o LateUpdate.
+    /// </summary>
     private void RegisterSystems()
     {
         updateManager.RegisterUpdateable(playerSystem);
@@ -163,6 +188,9 @@ public sealed class GameBootstrap : MonoBehaviour
         updateManager.RegisterLateUpdateable(renderingSyncSystem);
     }
 
+    /// <summary>
+    /// Restaura el estado runtime del gameplay al iniciar o reiniciar una partida.
+    /// </summary>
     private void ResetGameplay()
     {
         physicsRegistry.Clear();

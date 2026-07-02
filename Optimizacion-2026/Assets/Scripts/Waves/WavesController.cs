@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// Controlador de waves del prototipo inicial. El flujo principal actual usa WaveSystem.
+/// </summary>
 public class WavesController : IUpdateable
 {
     private readonly int maxWaves;
@@ -14,6 +17,9 @@ public class WavesController : IUpdateable
 
     public int WaveCount => waveCount;
 
+    /// <summary>
+    /// Recibe waves del prototipo inicial, cantidad máxima y timers de aviso e inicio.
+    /// </summary>
     public WavesController(int maxWaves, List<Wave> wavesList, float newWaveTime, float textTime)
     {
         this.maxWaves = maxWaves;
@@ -24,6 +30,9 @@ public class WavesController : IUpdateable
         wave = null;
     }
 
+    /// <summary>
+    /// Reinicia el contador y el estado de todas las waves del prototipo inicial.
+    /// </summary>
     public void Initialize()
     {
         waveCount = 0;
@@ -36,6 +45,9 @@ public class WavesController : IUpdateable
         currentTime = 0f;
     }
 
+    /// <summary>
+    /// Controla la duración del aviso visual de próxima wave.
+    /// </summary>
     public void WaveIncomingWarning(float deltaTime)
     {
         if (!showText)
@@ -51,6 +63,9 @@ public class WavesController : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Actualiza la wave activa del prototipo inicial o espera para iniciar la siguiente.
+    /// </summary>
     public void Update(float deltaTime)
     {
         WaveIncomingWarning(deltaTime);
@@ -75,6 +90,9 @@ public class WavesController : IUpdateable
         }
     }
 
+    /// <summary>
+    /// Asigna una nueva wave cuando vence el tiempo entre waves.
+    /// </summary>
     private void SetNewWave(float deltaTime)
     {
         currentTime += deltaTime;
