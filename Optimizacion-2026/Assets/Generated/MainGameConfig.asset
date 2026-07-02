@@ -55,8 +55,8 @@ MonoBehaviour:
       prefab: {fileID: 6852009541234005464, guid: 24f6313c38ae27941b4c2f97ab88eecc, type: 3}
       prewarmCount: 200
     - id: 7
-      prefab: {fileID: 4910924708346032963, guid: 3cdd56832c7dcfc47b0fbf495c9ddb46, type: 3}
-      prewarmCount: 0
+      prefab: {fileID: 4054124075912634761, guid: 1fda8fb978b593b44894d74c8f6d19f1, type: 3}
+      prewarmCount: 5
   waves:
   - enemies:
     - type: 0
