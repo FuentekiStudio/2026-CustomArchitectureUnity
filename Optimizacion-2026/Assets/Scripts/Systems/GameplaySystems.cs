@@ -262,7 +262,6 @@ public sealed class VfxSystem : IUpdateable
 
         for (int i = 0; i < activeVfx.Count; i++)
         {
-            Debug.Log(activeVfx[i].CheckIsStopped());
             if (activeVfx[i].CheckIsStopped())
             {
                 Recycle(activeVfx[i]);

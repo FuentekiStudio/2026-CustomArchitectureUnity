@@ -29,7 +29,6 @@ public class Vfx : IPoolable
 
     public void Activate()
     {
-        Debug.Log("");
         selfGO.SetActive(true);
         particleSystemRef.Play();
     }
