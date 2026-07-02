@@ -230,6 +230,67 @@ public sealed class EnemySystem : IFixedUpdateable
     }
 }
 
+public sealed class VfxSystem : IUpdateable
+{
+    private readonly List<Vfx> activeVfx = new List<Vfx>();
+    private readonly PoolService poolService;
+    private readonly GameStateSystem gameState;
+
+    public VfxSystem(PoolService poolService, GameStateSystem gameState)
+    {
+        this.poolService = poolService;
+        this.gameState = gameState;
+    }
+
+    public IReadOnlyList<Vfx> ActiveEnemies => activeVfx;
+    public int ActiveCount => activeVfx.Count;
+
+    public void Register(Vfx vfx)
+    {
+        if (vfx != null && !activeVfx.Contains(vfx))
+        {
+            activeVfx.Add(vfx);
+        }
+    }
+
+    public void Update(float deltaTime)
+    {
+        if (!gameState.IsGameplayRunning)
+        {
+            return;
+        }
+
+        for (int i = 0; i < activeVfx.Count; i++)
+        {
+            Debug.Log(activeVfx[i].CheckIsStopped());
+            if (activeVfx[i].CheckIsStopped())
+            {
+                Recycle(activeVfx[i]);
+            }
+        }
+    }
+
+    public void Recycle(Vfx vfx)
+    {
+        if (vfx == null)
+        {
+            return;
+        }
+
+        activeVfx.Remove(vfx);
+        vfx.isActive = false;
+        poolService.Return(vfx.id, vfx.poolable);
+    }
+
+    public void Clear()
+    {
+        for (int i = activeVfx.Count - 1; i >= 0; i--)
+        {
+            Recycle(activeVfx[i]);
+        }
+    }
+}
+
 public sealed class BuffWallSystem : IFixedUpdateable
 {
     private readonly List<BuffWallEntity> activeWalls = new List<BuffWallEntity>();

@@ -19,6 +19,7 @@ public sealed class GameBootstrap : MonoBehaviour
     private PlayerSystem playerSystem;
     private WaveSystem waveSystem;
     private EnemySystem enemySystem;
+    private VfxSystem vfxSystem;
     private BuffWallSystem buffWallSystem;
     private ProjectileSystem projectileSystem;
     private CollisionSystem collisionSystem;
@@ -26,6 +27,9 @@ public sealed class GameBootstrap : MonoBehaviour
     private UISystem uiSystem;
     private PhysicsRegistry physicsRegistry;
     private PoolService poolService;
+
+    private TimeService timeService;
+    private InputSystemService inputService;
 
     private void Awake()
     {
@@ -91,8 +95,8 @@ public sealed class GameBootstrap : MonoBehaviour
         eventBus = new GameEventBus();
         physicsRegistry = new PhysicsRegistry();
         poolService = new PoolService();
-        TimeService timeService = new TimeService();
-        InputSystemService inputService = new InputSystemService();
+        timeService = new TimeService();
+        inputService = new InputSystemService();
 
         poolService.Prewarm(gameConfig, poolRoot);
 
@@ -106,11 +110,9 @@ public sealed class GameBootstrap : MonoBehaviour
 
     private void BuildSystems()
     {
-        TimeService timeService = serviceLocator.Get<TimeService>();
-        InputSystemService inputService = serviceLocator.Get<InputSystemService>();
-
         gameStateSystem = new GameStateSystem(eventBus, timeService, poolService, ResetGameplay);
         enemySystem = new EnemySystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
+        vfxSystem = new VfxSystem(poolService, gameStateSystem);
         buffWallSystem = new BuffWallSystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
         projectileSystem = new ProjectileSystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
 
@@ -121,11 +123,12 @@ public sealed class GameBootstrap : MonoBehaviour
             enemySpawnPoint,
             buffWallSpawnPoint,
             enemySystem,
+            vfxSystem,
             buffWallSystem,
             projectileSystem,
             eventBus);
 
-        CombatSystem combatSystem = new CombatSystem(enemySystem, buffWallSystem, eventBus);
+        CombatSystem combatSystem = new CombatSystem(enemySystem, buffWallSystem, eventBus, poolService, spawnSystem);
         playerSystem = new PlayerSystem(gameConfig, inputService, spawnSystem, eventBus, gameStateSystem, playerTransform);
         waveSystem = new WaveSystem(gameConfig, spawnSystem, enemySystem, gameStateSystem, eventBus);
         collisionSystem = new CollisionSystem(projectileSystem, enemySystem, buffWallSystem, combatSystem, gameStateSystem, physicsRegistry, gameConfig, playerLine);
@@ -139,6 +142,7 @@ public sealed class GameBootstrap : MonoBehaviour
             .Register(playerSystem)
             .Register(waveSystem)
             .Register(enemySystem)
+            .Register(vfxSystem)
             .Register(buffWallSystem)
             .Register(projectileSystem)
             .Register(collisionSystem)
@@ -151,6 +155,7 @@ public sealed class GameBootstrap : MonoBehaviour
         updateManager.RegisterUpdateable(playerSystem);
         updateManager.RegisterUpdateable(waveSystem);
         updateManager.RegisterUpdateable(uiSystem);
+        updateManager.RegisterUpdateable(vfxSystem);
         updateManager.RegisterFixedUpdateable(enemySystem);
         updateManager.RegisterFixedUpdateable(buffWallSystem);
         updateManager.RegisterFixedUpdateable(projectileSystem);
@@ -163,6 +168,7 @@ public sealed class GameBootstrap : MonoBehaviour
         physicsRegistry.Clear();
         projectileSystem?.Clear();
         enemySystem?.Clear();
+        vfxSystem?.Clear();
         buffWallSystem?.Clear();
         playerSystem?.Reset();
         waveSystem?.Reset();

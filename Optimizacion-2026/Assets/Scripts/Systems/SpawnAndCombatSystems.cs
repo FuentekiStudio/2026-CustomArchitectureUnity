@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -10,12 +11,13 @@ public sealed class SpawnSystem
     private readonly Transform enemySpawnPoint;
     private readonly Transform buffWallSpawnPoint;
     private readonly EnemySystem enemySystem;
+    private readonly VfxSystem vfxSystem;
     private readonly BuffWallSystem buffWallSystem;
     private readonly ProjectileSystem projectileSystem;
     private readonly IGameEventBus eventBus;
     private int nextId = 1;
 
-    public SpawnSystem(PoolService poolService, PhysicsRegistry physicsRegistry, GameConfig config, Transform enemySpawnPoint, Transform buffWallSpawnPoint, EnemySystem enemySystem, BuffWallSystem buffWallSystem, ProjectileSystem projectileSystem, IGameEventBus eventBus)
+    public SpawnSystem(PoolService poolService, PhysicsRegistry physicsRegistry, GameConfig config, Transform enemySpawnPoint, Transform buffWallSpawnPoint, EnemySystem enemySystem, VfxSystem vfxSystem, BuffWallSystem buffWallSystem, ProjectileSystem projectileSystem, IGameEventBus eventBus)
     {
         this.poolService = poolService;
         this.physicsRegistry = physicsRegistry;
@@ -23,6 +25,7 @@ public sealed class SpawnSystem
         this.enemySpawnPoint = enemySpawnPoint;
         this.buffWallSpawnPoint = buffWallSpawnPoint;
         this.enemySystem = enemySystem;
+        this.vfxSystem = vfxSystem;
         this.buffWallSystem = buffWallSystem;
         this.projectileSystem = projectileSystem;
         this.eventBus = eventBus;
@@ -117,14 +120,20 @@ public sealed class SpawnSystem
         return projectile;
     }
 
-    public void SpawnImpactVfx(Vector3 position)
+    public Vfx SpawnVfx(Vector3 position, PoolId poolId)
     {
-        IPoolable poolable = poolService.Get(PoolId.ImpactVfx);
+        Vfx vfx = null;
+        IPoolable poolable = poolService.Get(poolId);
         if (poolable is PoolableGameObject pooled && pooled.Instance != null)
         {
             pooled.Instance.transform.position = position;
+            vfx = new Vfx(pooled.Instance, poolId, poolable);
+            vfxSystem.Register(vfx);
             poolable.Activate();
+            vfx.Activate();
         }
+        
+        return vfx;
     }
 
 
@@ -207,14 +216,18 @@ public sealed class SpawnSystem
 public sealed class CombatSystem
 {
     private readonly EnemySystem enemySystem;
+    private readonly PoolService poolService;
+    private readonly SpawnSystem spawnSystem;
     private readonly BuffWallSystem buffWallSystem;
     private readonly IGameEventBus eventBus;
 
-    public CombatSystem(EnemySystem enemySystem, BuffWallSystem buffWallSystem, IGameEventBus eventBus)
+    public CombatSystem(EnemySystem enemySystem, BuffWallSystem buffWallSystem, IGameEventBus eventBus, PoolService poolService, SpawnSystem spawnSystem)
     {
         this.enemySystem = enemySystem;
         this.buffWallSystem = buffWallSystem;
         this.eventBus = eventBus;
+        this.poolService = poolService;
+        this.spawnSystem = spawnSystem;
     }
 
     public void ApplyDamage(IDamageable target, int amount)
@@ -243,6 +256,8 @@ public sealed class CombatSystem
 
     public void KillEnemy(EnemyEntity enemy)
     {
+        //poolService.Get(PoolId.ImpactVfx);
+        spawnSystem.SpawnVfx(enemy.Position, PoolId.ImpactVfx);
         enemySystem.Recycle(enemy);
         eventBus.Raise(new EnemyDefeatedEvent(enemy.id, enemySystem.ActiveCount));
     }
