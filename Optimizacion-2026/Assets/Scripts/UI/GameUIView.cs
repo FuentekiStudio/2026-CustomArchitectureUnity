@@ -1,4 +1,7 @@
 using TMPro;
+using UnityEngine.UI;
+
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class GameUIView : MonoBehaviour
@@ -18,6 +21,12 @@ public sealed class GameUIView : MonoBehaviour
     [SerializeField] private TMP_Text buffText;
     [SerializeField] private TMP_Text projectileText;
 
+    [Header("The Button")]
+    [SerializeField] private GameObject prefabButton;
+
+    public GameObject PrefabButton => prefabButton;
+    private List<Button> activeButtons = new List<Button>();
+
     private UISystem uiSystem;
 
     public void Bind(UISystem uiSystem)
@@ -33,24 +42,46 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowHUD()
     {
+        ClearActiveButtons(activeButtons, uiSystem);
+
+
         SetPanels(mainMenu: false, hud: true, pause: false, victory: false, defeat: false);
         EnsureAssignedLayout();
     }
 
+
+
     public void ShowPause()
     {
+        ClearActiveButtons(activeButtons, uiSystem);
+
+        activeButtons.Add(uiSystem.SetUpButton("Resume", OnResumePressed, pausePanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Restart", OnRestartPressed, pausePanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit", OnQuitPressed, pausePanel.transform));
+
         SetPanels(mainMenu: false, hud: true, pause: true, victory: false, defeat: false);
         EnsureAssignedLayout();
     }
 
     public void ShowVictory()
     {
+        ClearActiveButtons(activeButtons, uiSystem);
+
+        activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, victoryPanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit Game", OnQuitPressed, victoryPanel.transform));
+
         SetPanels(mainMenu: false, hud: false, pause: false, victory: true, defeat: false);
         EnsureAssignedLayout();
     }
 
     public void ShowDefeat()
     {
+        CLogger.Log("GameUIView: ShowDefeat called");
+        ClearActiveButtons(activeButtons, uiSystem);
+
+        activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, defeatPanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit Game", OnQuitPressed, defeatPanel.transform));
+
         SetPanels(mainMenu: false, hud: false, pause: false, victory: false, defeat: true);
         EnsureAssignedLayout();
     }
@@ -161,5 +192,16 @@ public sealed class GameUIView : MonoBehaviour
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
         rectTransform.localScale = Vector3.one;
+    }
+
+    private static void ClearActiveButtons(List<Button> activeButtons, UISystem uiSystem)
+    {
+        for (int i = 0; i < activeButtons.Count; i++)
+        {
+            Button button = activeButtons[i];
+            uiSystem.ReturnButton(button);
+        }
+
+        activeButtons.Clear();
     }
 }
