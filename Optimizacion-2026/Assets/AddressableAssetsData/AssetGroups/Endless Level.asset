@@ -27,9 +27,33 @@ MonoBehaviour:
     m_SerializedLabels:
     - Scenery
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fd61ecb80dbe4e4892a2d4b04a2a18f
+    m_Address: Assets/BackRock-NeonCity/Materials/Untitled-1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 188a05e384bc31b47a65c25aa0d6b332
+    m_Address: Assets/BackRock-NeonCity/Materials/MobileCityTexture 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1b95c839489392d4a8402ffe37091a01
     m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/ResidentOffice/building
       c 3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c18c17fafe88db4da3447635c9e1356
+    m_Address: Assets/BackRock-NeonCity/Materials/CityMaterial 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 210b32050cc073e44939407091fa8f61
+    m_Address: Assets/3DAssets/Materials/Enemy02_Tex.jpg
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scenery
@@ -45,6 +69,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29c324ed56670754cb5a46bde6090fb7
+    m_Address: Assets/3DAssets/Enemy02_Animations_20260701.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2d61897f6c4302e44b68809cf2eaab9f
     m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/ResidentOffice/building
@@ -65,8 +95,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 553f4d09324e5fc48bf386f621861f4b
+    m_Address: Assets/BackRock-NeonCity/Materials/Props.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5cbfb0756bb502d46b3dced234cca707
     m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 626b727fa7644df46a0482b238446e24
+    m_Address: Assets/BackRock-NeonCity/Materials/Poster.mat
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scenery
@@ -108,11 +150,23 @@ MonoBehaviour:
     m_SerializedLabels:
     - Player
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86bb5b6b42d2bcd49bcc2af0a1732cbe
+    m_Address: Assets/3DAssets/Enemy02_Animations_20260603.blend
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 87bc168f3f265464cac442e22c90aa65
     m_Address: Assets/Generated/Prefabs/Enemy_Normal.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c883322e8d50a84bb9cc0720c7b6f90
+    m_Address: Assets/BackRock-NeonCity/Materials/CityMaterial.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 94d9ed78b09fde44ba3b99ddb6ab433f
     m_Address: Assets/Generated/Prefabs/Enemy_Boss.prefab
@@ -120,11 +174,29 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ca07d6e6e5170a4c81761f0f5d17f64
+    m_Address: Assets/BackRock-NeonCity/Materials/Sci_fi_Tex.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2913486872a3ea49a7995dd2be31348
     m_Address: Assets/3DAssets/Materials/Crystals.mat
     m_ReadOnly: 0
     m_SerializedLabels:
     - Party
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af84204fdf2bec04fbeb2959cb75b44d
+    m_Address: Assets/BackRock-NeonCity/Materials/MobileCityTexture.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1d729a3621ca6b43a422ffc233c1ca0
+    m_Address: Assets/BackRock-NeonCity/Materials/aiStandardSurface1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b9c09083889536b438ed162348604467
     m_Address: Assets/Generated/Prefabs/Player.prefab
@@ -171,6 +243,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2e1d99209af2404bb2278294112c082
     m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5a0e15f96839984ea2eb6fd1087a014
+    m_Address: Assets/BackRock-NeonCity/Materials/WetCityMaterial.mat
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scenery
