@@ -42,17 +42,22 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowHUD()
     {
+        for (int i = 0; i < activeButtons.Count; i++)
+        {
+            Button button = activeButtons[i];
+            uiSystem.ReturnButton(button);
+        }
+
+
         SetPanels(mainMenu: false, hud: true, pause: false, victory: false, defeat: false);
         EnsureAssignedLayout();
     }
 
     public void ShowPause()
     {
-        activeButtons.Add( uiSystem.SetUpButton("Resume", OnResumePressed, pausePanel.transform) ) ;
+        activeButtons.Add(uiSystem.SetUpButton("Resume", OnResumePressed, pausePanel.transform));
         activeButtons.Add(uiSystem.SetUpButton("Restart", OnRestartPressed, pausePanel.transform));
         activeButtons.Add(uiSystem.SetUpButton("Quit", OnQuitPressed, pausePanel.transform));
-
-
 
         SetPanels(mainMenu: false, hud: true, pause: true, victory: false, defeat: false);
         EnsureAssignedLayout();
