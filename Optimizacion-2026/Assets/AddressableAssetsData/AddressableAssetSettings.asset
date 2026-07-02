@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 2d4de41e9f211ed408c5942985ca5490
   m_currentHash:
     serializedVersion: 2
-    Hash: f92e638a90b9782ee99d56c289041664
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
@@ -100,10 +100,10 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - default
     - Enemy
     - All
     - Player
+    - Scenery
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: c23e4f9f0282be348bc1e7ad4e40a62f, type: 2}

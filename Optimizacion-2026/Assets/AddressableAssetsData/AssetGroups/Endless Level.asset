@@ -21,6 +21,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02a96a40a166e8e45bc57af9dfec9bca
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 7.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b95c839489392d4a8402ffe37091a01
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/ResidentOffice/building
+      c 3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23e4e15bea7d4954a96ff3114bc4367b
     m_Address: Assets/3DAssets/Materials/EnemyElite.mat
     m_ReadOnly: 0
@@ -33,17 +46,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - Player
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3b0173bd406fc1c4e843e7fe477c83f6
-    m_Address: Assets/3DAssets/Materials/Enemy02_Tex.mat
+  - m_GUID: 2d61897f6c4302e44b68809cf2eaab9f
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/ResidentOffice/building
+      h 8.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Party
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 351bc1f78ade58c4894f2c9d7a46d171
+    m_Address: Assets/BackRock-NeonCity/Prefab/Street/2 lanes/road cross3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d596cb11e57cb94d9ce127759d0460a
     m_Address: Assets/3DAssets/Materials/EnemyMegazord.mat
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cbfb0756bb502d46b3dced234cca707
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 65d41d70f4fc9274ba55713f17258eac
     m_Address: Assets/Generated/Prefabs/Megazord.prefab
@@ -118,11 +144,54 @@ MonoBehaviour:
     m_SerializedLabels:
     - Enemy
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9381ed45633e334ab88c2bb9d3ecc90
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cec1f860fec0cb1498c2b6f7b67521c7
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 2 B.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd051c93176369c4f8b9602bbfd94da7
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/ResidentOffice/building
+      j 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dece7f5e9acbce547b6aaef4caa88e0e
     m_Address: Assets/3DAssets/Animations/BossController.controller
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2e1d99209af2404bb2278294112c082
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Shops/shop 5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5b580fb40e3ba6489d7b6d7c20fedba
+    m_Address: Assets/BackRock-NeonCity/Prefab/Buildings/Skyscraper/building l 8.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7aeb617f6d0f1643992688dec028f78
+    m_Address: Assets/BackRock-NeonCity/Prefab/Street/2 lanes/road 6.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa4cdce30f7553a41ab78389fb3a80a5
+    m_Address: Assets/BackRock-NeonCity/Mesh/Sci Fi Van_LowPoly.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scenery
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fefe5b0d603a2984baeeaed3e71ef616
     m_Address: Assets/3DAssets/Animations/PlayerController.controller
