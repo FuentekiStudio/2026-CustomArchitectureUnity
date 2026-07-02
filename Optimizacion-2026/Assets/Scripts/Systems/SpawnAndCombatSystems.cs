@@ -40,19 +40,17 @@ public sealed class SpawnSystem
             return null;
         }
 
-        EnemyEntity enemy = new EnemyEntity
-        {
-            id = nextId++,
-            type = data.type,
-            health = Mathf.Max(1, data.health),
-            speed = Mathf.Max(0f, data.speed),
-            position = GetEnemySpawnPosition(),
-            view = view,
-            collider = collider,
-            poolable = poolable,
-            poolId = poolId,
-            isActive = true
-        };
+        EnemyEntity enemy = enemySystem.GetEntity();
+        enemy.id = nextId++;
+        enemy.type = data.type;
+        enemy.health = Mathf.Max(1, data.health);
+        enemy.speed = Mathf.Max(0f, data.speed);
+        enemy.position = GetEnemySpawnPosition();
+        enemy.view = view;
+        enemy.collider = collider;
+        enemy.poolable = poolable;
+        enemy.poolId = poolId;
+        enemy.isActive = true;
 
         view.transform.position = enemy.position;
         physicsRegistry.Register(collider, new EntityRef(EntityKind.Enemy, enemy));
@@ -70,19 +68,17 @@ public sealed class SpawnSystem
             return null;
         }
 
-        BuffWallEntity wall = new BuffWallEntity
-        {
-            id = nextId++,
-            health = Mathf.Max(1, data.health),
-            speed = Mathf.Max(0f, data.speed),
-            buff = new BuffData { type = data.type, value = data.value },
-            position = GetSpawnPosition(buffWallSpawnPoint),
-            view = view,
-            collider = collider,
-            poolable = poolable,
-            poolId = poolId,
-            isActive = true
-        };
+        BuffWallEntity wall = buffWallSystem.GetEntity();
+        wall.id = nextId++;
+        wall.health = Mathf.Max(1, data.health);
+        wall.speed = Mathf.Max(0f, data.speed);
+        wall.buff = new BuffData { type = data.type, value = data.value };
+        wall.position = GetSpawnPosition(buffWallSpawnPoint);
+        wall.view = view;
+        wall.collider = collider;
+        wall.poolable = poolable;
+        wall.poolId = poolId;
+        wall.isActive = true;
 
         view.transform.position = wall.position;
         UpdateBuffWallView(view, wall.buff);
@@ -99,20 +95,18 @@ public sealed class SpawnSystem
             return null;
         }
 
-        ProjectileEntity projectile = new ProjectileEntity
-        {
-            id = nextId++,
-            damage = Mathf.Max(1, data.damage),
-            direction = data.direction == Vector3.zero ? Vector3.forward : data.direction.normalized,
-            lifetime = config != null ? config.projectile.lifetime : ProjectileConfig.Default.lifetime,
-            owner = data.owner,
-            position = data.position,
-            view = view,
-            collider = collider,
-            poolable = poolable,
-            poolId = PoolId.Projectile,
-            isActive = true
-        };
+        ProjectileEntity projectile = projectileSystem.GetEntity();
+        projectile.id = nextId++;
+        projectile.damage = Mathf.Max(1, data.damage);
+        projectile.direction = data.direction == Vector3.zero ? Vector3.forward : data.direction.normalized;
+        projectile.lifetime = config != null ? config.projectile.lifetime : ProjectileConfig.Default.lifetime;
+        projectile.owner = data.owner;
+        projectile.position = data.position;
+        projectile.view = view;
+        projectile.collider = collider;
+        projectile.poolable = poolable;
+        projectile.poolId = PoolId.Projectile;
+        projectile.isActive = true;
 
         view.transform.position = projectile.position;
         physicsRegistry.Register(collider, new EntityRef(EntityKind.Projectile, projectile));
@@ -127,7 +121,8 @@ public sealed class SpawnSystem
         if (poolable is PoolableGameObject pooled && pooled.Instance != null)
         {
             pooled.Instance.transform.position = position;
-            vfx = new Vfx(pooled.Instance, poolId, poolable);
+            vfx = vfxSystem.GetVfx();
+            vfx.Initialize(pooled.Instance, poolId, poolable);
             vfxSystem.Register(vfx);
             poolable.Activate();
             vfx.Activate();
@@ -441,3 +436,4 @@ public sealed class RenderingSyncSystem : ILateUpdateable
         }
     }
 }
+

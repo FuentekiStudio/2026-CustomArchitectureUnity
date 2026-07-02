@@ -108,27 +108,36 @@ public sealed class WaveSystem : IUpdateable
     private sealed class RuntimeWave
     {
         private readonly WaveConfig config;
-        private readonly SpawnCursor<EnemySpawnData> enemyCursor;
-        private readonly SpawnCursor<BuffWallSpawnData> buffWallCursor;
+        private readonly EnemySpawnCursor enemyCursor;
+        private readonly BuffWallSpawnCursor buffWallCursor;
+        private readonly int totalEnemies;
         private float bossTimer;
         private bool bossSpawned;
 
         public RuntimeWave(WaveConfig config)
         {
             this.config = config;
-            enemyCursor = new SpawnCursor<EnemySpawnData>(config.enemies);
-            buffWallCursor = new SpawnCursor<BuffWallSpawnData>(config.buffWalls);
+            enemyCursor = new EnemySpawnCursor(config.enemies);
+            buffWallCursor = new BuffWallSpawnCursor(config.buffWalls);
+            totalEnemies = enemyCursor.TotalCount + (config.megazord.enabled ? 1 : 0);
             bossTimer = 0f;
             bossSpawned = !config.megazord.enabled;
         }
 
-        public int TotalEnemies => enemyCursor.TotalCount + (config.megazord.enabled ? 1 : 0);
+        public int TotalEnemies => totalEnemies;
         public bool IsCombatSpawnComplete => enemyCursor.IsComplete && bossSpawned;
 
         public void Update(float deltaTime, SpawnSystem spawnSystem)
         {
-            enemyCursor.Update(deltaTime, data => spawnSystem.SpawnEnemy(data));
-            buffWallCursor.Update(deltaTime, data => spawnSystem.SpawnBuffWall(data));
+            if (enemyCursor.TryUpdate(deltaTime, out EnemySpawnData enemySpawnData))
+            {
+                spawnSystem.SpawnEnemy(enemySpawnData);
+            }
+
+            if (buffWallCursor.TryUpdate(deltaTime, out BuffWallSpawnData buffWallSpawnData))
+            {
+                spawnSystem.SpawnBuffWall(buffWallSpawnData);
+            }
 
             if (!bossSpawned)
             {
@@ -149,70 +158,59 @@ public sealed class WaveSystem : IUpdateable
         }
     }
 
-    private sealed class SpawnCursor<T>
+    private sealed class EnemySpawnCursor
     {
-        private readonly T[] entries;
+        private readonly EnemySpawnData[] entries;
+        private readonly int totalCount;
         private int entryIndex;
         private int spawnedFromEntry;
         private float timer;
 
-        public SpawnCursor(T[] entries)
+        public EnemySpawnCursor(EnemySpawnData[] entries)
         {
-            this.entries = entries ?? System.Array.Empty<T>();
+            this.entries = entries ?? System.Array.Empty<EnemySpawnData>();
+            totalCount = CalculateTotalCount(this.entries);
             timer = float.MaxValue;
         }
 
         public bool IsComplete => entryIndex >= entries.Length;
-        public int TotalCount
-        {
-            get
-            {
-                int total = 0;
-                for (int i = 0; i < entries.Length; i++)
-                {
-                    if (entries[i] is EnemySpawnData enemy)
-                    {
-                        total += Mathf.Max(0, enemy.count);
-                    }
-                    else if (entries[i] is BuffWallSpawnData wall)
-                    {
-                        total += Mathf.Max(0, wall.count);
-                    }
-                }
+        public int TotalCount => totalCount;
 
-                return total;
-            }
-        }
-
-        public void Update(float deltaTime, System.Action<T> spawn)
+        public bool TryUpdate(float deltaTime, out EnemySpawnData spawnData)
         {
+            spawnData = default;
+
             if (IsComplete)
             {
-                return;
+                return false;
             }
 
             timer += deltaTime;
-            T entry = entries[entryIndex];
-            int count = GetCount(entry);
-            float interval = GetInterval(entry);
+            EnemySpawnData entry = entries[entryIndex];
+            int count = entry.count;
+            float interval = entry.interval;
 
             if (count <= 0)
             {
                 MoveNextEntry();
-                return;
+                return false;
             }
 
-            if (timer >= Mathf.Max(0f, interval))
+            if (timer < Mathf.Max(0f, interval))
             {
-                timer = 0f;
-                spawn(entry);
-                spawnedFromEntry++;
-
-                if (spawnedFromEntry >= count)
-                {
-                    MoveNextEntry();
-                }
+                return false;
             }
+
+            timer = 0f;
+            spawnData = entry;
+            spawnedFromEntry++;
+
+            if (spawnedFromEntry >= count)
+            {
+                MoveNextEntry();
+            }
+
+            return true;
         }
 
         private void MoveNextEntry()
@@ -222,34 +220,75 @@ public sealed class WaveSystem : IUpdateable
             timer = float.MaxValue;
         }
 
-        private static int GetCount(T entry)
+        private static int CalculateTotalCount(EnemySpawnData[] entries)
         {
-            if (entry is EnemySpawnData enemy)
+            int total = 0;
+            for (int i = 0; i < entries.Length; i++)
             {
-                return enemy.count;
+                total += Mathf.Max(0, entries[i].count);
             }
 
-            if (entry is BuffWallSpawnData wall)
-            {
-                return wall.count;
-            }
+            return total;
+        }
+    }
 
-            return 0;
+    private sealed class BuffWallSpawnCursor
+    {
+        private readonly BuffWallSpawnData[] entries;
+        private int entryIndex;
+        private int spawnedFromEntry;
+        private float timer;
+
+        public BuffWallSpawnCursor(BuffWallSpawnData[] entries)
+        {
+            this.entries = entries ?? System.Array.Empty<BuffWallSpawnData>();
+            timer = float.MaxValue;
         }
 
-        private static float GetInterval(T entry)
+        public bool IsComplete => entryIndex >= entries.Length;
+
+        public bool TryUpdate(float deltaTime, out BuffWallSpawnData spawnData)
         {
-            if (entry is EnemySpawnData enemy)
+            spawnData = default;
+
+            if (IsComplete)
             {
-                return enemy.interval;
+                return false;
             }
 
-            if (entry is BuffWallSpawnData wall)
+            timer += deltaTime;
+            BuffWallSpawnData entry = entries[entryIndex];
+            int count = entry.count;
+            float interval = entry.interval;
+
+            if (count <= 0)
             {
-                return wall.interval;
+                MoveNextEntry();
+                return false;
             }
 
-            return 0f;
+            if (timer < Mathf.Max(0f, interval))
+            {
+                return false;
+            }
+
+            timer = 0f;
+            spawnData = entry;
+            spawnedFromEntry++;
+
+            if (spawnedFromEntry >= count)
+            {
+                MoveNextEntry();
+            }
+
+            return true;
+        }
+
+        private void MoveNextEntry()
+        {
+            entryIndex++;
+            spawnedFromEntry = 0;
+            timer = float.MaxValue;
         }
     }
 }

@@ -8,7 +8,16 @@ public class Vfx : IPoolable
     public PoolId id;
     public IPoolable poolable;
 
+    public Vfx()
+    {
+    }
+
     public Vfx(GameObject selfGO, PoolId id, IPoolable poolable)
+    {
+        Initialize(selfGO, id, poolable);
+    }
+
+    public void Initialize(GameObject selfGO, PoolId id, IPoolable poolable)
     {
         this.selfGO = selfGO;
         particleSystemRef = this.selfGO.GetComponent<ParticleSystem>();

@@ -112,7 +112,7 @@ public sealed class GameBootstrap : MonoBehaviour
     {
         gameStateSystem = new GameStateSystem(eventBus, timeService, poolService, ResetGameplay);
         enemySystem = new EnemySystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
-        vfxSystem = new VfxSystem(poolService, gameStateSystem);
+        vfxSystem = new VfxSystem(poolService, gameStateSystem, gameConfig);
         buffWallSystem = new BuffWallSystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
         projectileSystem = new ProjectileSystem(poolService, physicsRegistry, gameConfig, gameStateSystem);
 
@@ -174,3 +174,4 @@ public sealed class GameBootstrap : MonoBehaviour
         waveSystem?.Reset();
     }
 }
+

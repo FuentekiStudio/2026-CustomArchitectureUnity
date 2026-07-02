@@ -165,6 +165,7 @@ public sealed class PlayerSystem : IUpdateable
 public sealed class EnemySystem : IFixedUpdateable
 {
     private readonly List<EnemyEntity> activeEnemies = new List<EnemyEntity>();
+    private readonly Stack<EnemyEntity> inactiveEnemies = new Stack<EnemyEntity>();
     private readonly PoolService poolService;
     private readonly PhysicsRegistry physicsRegistry;
     private readonly LaneConfig laneConfig;
@@ -176,10 +177,24 @@ public sealed class EnemySystem : IFixedUpdateable
         this.physicsRegistry = physicsRegistry;
         laneConfig = config != null ? config.lanes : LaneConfig.Default;
         this.gameState = gameState;
+        PrewarmEntities(PoolPrewarmUtility.GetCount(config, PoolId.EnemyNormal) + PoolPrewarmUtility.GetCount(config, PoolId.EnemyElite) + PoolPrewarmUtility.GetCount(config, PoolId.EnemyBoss) + PoolPrewarmUtility.GetCount(config, PoolId.MegazordBoss));
     }
 
     public IReadOnlyList<EnemyEntity> ActiveEnemies => activeEnemies;
     public int ActiveCount => activeEnemies.Count;
+
+    public EnemyEntity GetEntity()
+    {
+        return inactiveEnemies.Count > 0 ? inactiveEnemies.Pop() : new EnemyEntity();
+    }
+
+    private void PrewarmEntities(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            inactiveEnemies.Push(new EnemyEntity());
+        }
+    }
 
     public void Register(EnemyEntity enemy)
     {
@@ -210,10 +225,15 @@ public sealed class EnemySystem : IFixedUpdateable
             return;
         }
 
-        activeEnemies.Remove(enemy);
+        if (!activeEnemies.Remove(enemy))
+        {
+            return;
+        }
+
         enemy.isActive = false;
         physicsRegistry.Unregister(enemy.collider);
         poolService.Return(enemy.poolId, enemy.poolable);
+        inactiveEnemies.Push(enemy);
     }
 
     public void Clear()
@@ -233,17 +253,32 @@ public sealed class EnemySystem : IFixedUpdateable
 public sealed class VfxSystem : IUpdateable
 {
     private readonly List<Vfx> activeVfx = new List<Vfx>();
+    private readonly Stack<Vfx> inactiveVfx = new Stack<Vfx>();
     private readonly PoolService poolService;
     private readonly GameStateSystem gameState;
 
-    public VfxSystem(PoolService poolService, GameStateSystem gameState)
+    public VfxSystem(PoolService poolService, GameStateSystem gameState, GameConfig config)
     {
         this.poolService = poolService;
         this.gameState = gameState;
+        PrewarmVfx(PoolPrewarmUtility.GetCount(config, PoolId.ImpactVfx));
     }
 
     public IReadOnlyList<Vfx> ActiveEnemies => activeVfx;
     public int ActiveCount => activeVfx.Count;
+
+    public Vfx GetVfx()
+    {
+        return inactiveVfx.Count > 0 ? inactiveVfx.Pop() : new Vfx();
+    }
+
+    private void PrewarmVfx(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            inactiveVfx.Push(new Vfx());
+        }
+    }
 
     public void Register(Vfx vfx)
     {
@@ -260,7 +295,7 @@ public sealed class VfxSystem : IUpdateable
             return;
         }
 
-        for (int i = 0; i < activeVfx.Count; i++)
+        for (int i = activeVfx.Count - 1; i >= 0; i--)
         {
             if (activeVfx[i].CheckIsStopped())
             {
@@ -276,9 +311,14 @@ public sealed class VfxSystem : IUpdateable
             return;
         }
 
-        activeVfx.Remove(vfx);
+        if (!activeVfx.Remove(vfx))
+        {
+            return;
+        }
+
         vfx.isActive = false;
         poolService.Return(vfx.id, vfx.poolable);
+        inactiveVfx.Push(vfx);
     }
 
     public void Clear()
@@ -293,6 +333,7 @@ public sealed class VfxSystem : IUpdateable
 public sealed class BuffWallSystem : IFixedUpdateable
 {
     private readonly List<BuffWallEntity> activeWalls = new List<BuffWallEntity>();
+    private readonly Stack<BuffWallEntity> inactiveWalls = new Stack<BuffWallEntity>();
     private readonly PoolService poolService;
     private readonly PhysicsRegistry physicsRegistry;
     private readonly LaneConfig laneConfig;
@@ -304,10 +345,24 @@ public sealed class BuffWallSystem : IFixedUpdateable
         this.physicsRegistry = physicsRegistry;
         laneConfig = config != null ? config.lanes : LaneConfig.Default;
         this.gameState = gameState;
+        PrewarmEntities(PoolPrewarmUtility.GetCount(config, PoolId.BuffWallDamage) + PoolPrewarmUtility.GetCount(config, PoolId.BuffWallProjectileCount));
     }
 
     public IReadOnlyList<BuffWallEntity> ActiveWalls => activeWalls;
     public int ActiveCount => activeWalls.Count;
+
+    public BuffWallEntity GetEntity()
+    {
+        return inactiveWalls.Count > 0 ? inactiveWalls.Pop() : new BuffWallEntity();
+    }
+
+    private void PrewarmEntities(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            inactiveWalls.Push(new BuffWallEntity());
+        }
+    }
 
     public void Register(BuffWallEntity wall)
     {
@@ -338,10 +393,15 @@ public sealed class BuffWallSystem : IFixedUpdateable
             return;
         }
 
-        activeWalls.Remove(wall);
+        if (!activeWalls.Remove(wall))
+        {
+            return;
+        }
+
         wall.isActive = false;
         physicsRegistry.Unregister(wall.collider);
         poolService.Return(wall.poolId, wall.poolable);
+        inactiveWalls.Push(wall);
     }
 
     public void Clear()
@@ -361,6 +421,7 @@ public sealed class BuffWallSystem : IFixedUpdateable
 public sealed class ProjectileSystem : IFixedUpdateable
 {
     private readonly List<ProjectileEntity> activeProjectiles = new List<ProjectileEntity>();
+    private readonly Stack<ProjectileEntity> inactiveProjectiles = new Stack<ProjectileEntity>();
     private readonly PoolService poolService;
     private readonly PhysicsRegistry physicsRegistry;
     private readonly ProjectileConfig config;
@@ -372,10 +433,24 @@ public sealed class ProjectileSystem : IFixedUpdateable
         this.physicsRegistry = physicsRegistry;
         config = gameConfig != null ? gameConfig.projectile : ProjectileConfig.Default;
         this.gameState = gameState;
+        PrewarmEntities(PoolPrewarmUtility.GetCount(gameConfig, PoolId.Projectile));
     }
 
     public IReadOnlyList<ProjectileEntity> ActiveProjectiles => activeProjectiles;
     public float HitRadius => config.hitRadius;
+
+    public ProjectileEntity GetEntity()
+    {
+        return inactiveProjectiles.Count > 0 ? inactiveProjectiles.Pop() : new ProjectileEntity();
+    }
+
+    private void PrewarmEntities(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            inactiveProjectiles.Push(new ProjectileEntity());
+        }
+    }
 
     public void Register(ProjectileEntity projectile)
     {
@@ -412,10 +487,15 @@ public sealed class ProjectileSystem : IFixedUpdateable
             return;
         }
 
-        activeProjectiles.Remove(projectile);
+        if (!activeProjectiles.Remove(projectile))
+        {
+            return;
+        }
+
         projectile.isActive = false;
         physicsRegistry.Unregister(projectile.collider);
         poolService.Return(projectile.poolId, projectile.poolable);
+        inactiveProjectiles.Push(projectile);
     }
 
     public void Clear()
@@ -426,3 +506,27 @@ public sealed class ProjectileSystem : IFixedUpdateable
         }
     }
 }
+
+
+internal static class PoolPrewarmUtility
+{
+    public static int GetCount(GameConfig config, PoolId id)
+    {
+        if (config == null || config.pools == null || config.pools.entries == null)
+        {
+            return 0;
+        }
+
+        PoolEntry[] entries = config.pools.entries;
+        for (int i = 0; i < entries.Length; i++)
+        {
+            if (entries[i].id == id)
+            {
+                return Mathf.Max(0, entries[i].prewarmCount);
+            }
+        }
+
+        return 0;
+    }
+}
+
