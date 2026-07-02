@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Player
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b0173bd406fc1c4e843e7fe477c83f6
+    m_Address: Assets/3DAssets/Materials/Enemy02_Tex.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Party
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d596cb11e57cb94d9ce127759d0460a
     m_Address: Assets/3DAssets/Materials/EnemyMegazord.mat
     m_ReadOnly: 0
@@ -62,6 +68,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
+    - Party
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 81bb9eea30387e442899949a80011e55
     m_Address: Assets/3DAssets/Banana Man.fbx
@@ -86,6 +93,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2913486872a3ea49a7995dd2be31348
+    m_Address: Assets/3DAssets/Materials/Crystals.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Party
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b9c09083889536b438ed162348604467
     m_Address: Assets/Generated/Prefabs/Player.prefab
