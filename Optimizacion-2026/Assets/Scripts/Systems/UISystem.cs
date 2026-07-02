@@ -96,9 +96,10 @@ public sealed class UISystem : IUpdateable
         {
 
             button.onClick.RemoveAllListeners();
-            button.gameObject.SetActive(false);
             activeButtons.Remove(button.gameObject);
             deactiveButtons.Add(button.gameObject);
+            button.gameObject.transform.SetParent(view.transform, false);
+            button.gameObject.SetActive(false);
         }
 
     }

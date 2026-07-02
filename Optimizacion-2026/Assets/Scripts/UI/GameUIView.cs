@@ -42,19 +42,19 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowHUD()
     {
-        for (int i = 0; i < activeButtons.Count; i++)
-        {
-            Button button = activeButtons[i];
-            uiSystem.ReturnButton(button);
-        }
+        ClearActiveButtons(activeButtons, uiSystem);
 
 
         SetPanels(mainMenu: false, hud: true, pause: false, victory: false, defeat: false);
         EnsureAssignedLayout();
     }
 
+
+
     public void ShowPause()
     {
+        ClearActiveButtons(activeButtons, uiSystem);
+
         activeButtons.Add(uiSystem.SetUpButton("Resume", OnResumePressed, pausePanel.transform));
         activeButtons.Add(uiSystem.SetUpButton("Restart", OnRestartPressed, pausePanel.transform));
         activeButtons.Add(uiSystem.SetUpButton("Quit", OnQuitPressed, pausePanel.transform));
@@ -65,12 +65,23 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowVictory()
     {
+        ClearActiveButtons(activeButtons, uiSystem);
+
+        activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, victoryPanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit Game", OnQuitPressed, victoryPanel.transform));
+
         SetPanels(mainMenu: false, hud: false, pause: false, victory: true, defeat: false);
         EnsureAssignedLayout();
     }
 
     public void ShowDefeat()
     {
+        CLogger.Log("GameUIView: ShowDefeat called");
+        ClearActiveButtons(activeButtons, uiSystem);
+
+        activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, defeatPanel.transform));
+        activeButtons.Add(uiSystem.SetUpButton("Quit Game", OnQuitPressed, defeatPanel.transform));
+
         SetPanels(mainMenu: false, hud: false, pause: false, victory: false, defeat: true);
         EnsureAssignedLayout();
     }
@@ -181,5 +192,16 @@ public sealed class GameUIView : MonoBehaviour
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
         rectTransform.localScale = Vector3.one;
+    }
+
+    private static void ClearActiveButtons(List<Button> activeButtons, UISystem uiSystem)
+    {
+        for (int i = 0; i < activeButtons.Count; i++)
+        {
+            Button button = activeButtons[i];
+            uiSystem.ReturnButton(button);
+        }
+
+        activeButtons.Clear();
     }
 }
