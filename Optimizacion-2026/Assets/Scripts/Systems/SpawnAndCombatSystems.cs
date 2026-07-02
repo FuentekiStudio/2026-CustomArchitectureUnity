@@ -272,6 +272,10 @@ public sealed class CombatSystem
 
 public sealed class CollisionSystem : IFixedUpdateable
 {
+    private const int EnemyLayer = 6;
+    private const int BarrierLayer = 7;
+    private const int ProjectileTargetLayerMask = (1 << EnemyLayer) | (1 << BarrierLayer);
+
     private readonly ProjectileSystem projectileSystem;
     private readonly EnemySystem enemySystem;
     private readonly BuffWallSystem buffWallSystem;
@@ -308,11 +312,16 @@ public sealed class CollisionSystem : IFixedUpdateable
 
     private void CheckProjectileHits()
     {
+        if (enemySystem.ActiveCount == 0 && buffWallSystem.ActiveCount == 0)
+        {
+            return;
+        }
+
         IReadOnlyList<ProjectileEntity> projectiles = projectileSystem.ActiveProjectiles;
         for (int i = projectiles.Count - 1; i >= 0; i--)
         {
             ProjectileEntity projectile = projectiles[i];
-            int count = Physics.OverlapSphereNonAlloc(projectile.position, projectileSystem.HitRadius, hitBuffer, Physics.AllLayers, QueryTriggerInteraction.Collide);
+            int count = Physics.OverlapSphereNonAlloc(projectile.position, projectileSystem.HitRadius, hitBuffer, ProjectileTargetLayerMask, QueryTriggerInteraction.Collide);
 
             for (int hitIndex = 0; hitIndex < count; hitIndex++)
             {

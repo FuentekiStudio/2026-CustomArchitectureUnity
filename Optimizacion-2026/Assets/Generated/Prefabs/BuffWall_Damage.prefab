@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1191806495235980851}
   - component: {fileID: 697644880688268807}
   - component: {fileID: 6750156430091454626}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuffWall_Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

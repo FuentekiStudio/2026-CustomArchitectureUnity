@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8423877902392414791}
   - component: {fileID: 1496113319545543813}
   - component: {fileID: 7066935615814235247}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5833962801169741371}
   - component: {fileID: 1570101319955955844}
   - component: {fileID: 1080704597470163345}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DefeatText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6137266607186887003}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: backup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 8544484254501395085}
   - component: {fileID: 2526113333184345536}
   - component: {fileID: 1787834947051075279}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemiesText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -453,7 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3962666775521011795}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MainMenuPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 9074678945983393077}
   - component: {fileID: 787817122102194498}
   - component: {fileID: 2221341237585476412}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -628,7 +628,7 @@ GameObject:
   - component: {fileID: 2433888784519730765}
   - component: {fileID: 1534345052568654525}
   - component: {fileID: 4299915814168268512}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuffText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 2341954541039448470}
   - component: {fileID: 2124819884077695389}
   - component: {fileID: 6978366472561436313}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WaveText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -900,7 +900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2047509519071058393}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PausePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -936,7 +936,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2286319277776226327}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DefeatPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -972,7 +972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1944811173616775920}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VictoryPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1010,7 +1010,7 @@ GameObject:
   - component: {fileID: 6930997373679567716}
   - component: {fileID: 2396303880877487394}
   - component: {fileID: 7488799752113220872}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VictoryText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 3565797066858970797}
   - component: {fileID: 5942678500034196086}
   - component: {fileID: 7187980237510097010}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PauseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1282,7 +1282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 363691335314858065}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HUDPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1323,7 +1323,7 @@ GameObject:
   - component: {fileID: 5690613151227996979}
   - component: {fileID: 1798654125606223453}
   - component: {fileID: 4649866563642985424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProjectileText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1461,7 +1461,7 @@ GameObject:
   - component: {fileID: 7860610123375089699}
   - component: {fileID: 6310889627746917363}
   - component: {fileID: 5818607905213980347}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1568,7 +1568,7 @@ GameObject:
   - component: {fileID: 1312385777720689988}
   - component: {fileID: 5717146560234539260}
   - component: {fileID: 6741749753872503934}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BarrierMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
