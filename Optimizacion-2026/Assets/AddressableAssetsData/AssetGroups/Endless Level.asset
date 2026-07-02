@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Endless Level
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Endless Level
+  m_GUID: 2d4de41e9f211ed408c5942985ca5490
+  m_SerializeEntries:
+  - m_GUID: 01ef668a4ba06ef4e939ae3d1a481a40
+    m_Address: Assets/3DAssets/Materials/EnemyBoss.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23e4e15bea7d4954a96ff3114bc4367b
+    m_Address: Assets/3DAssets/Materials/EnemyElite.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29ad3f12577562847af90c50b16a4bfa
+    m_Address: Assets/3DAssets/Materials/Player.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d596cb11e57cb94d9ce127759d0460a
+    m_Address: Assets/3DAssets/Materials/EnemyMegazord.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65d41d70f4fc9274ba55713f17258eac
+    m_Address: Assets/Generated/Prefabs/Megazord.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b3bc7981d06c464580536f2607f5a89
+    m_Address: Assets/3DAssets/Animations/NormalController.controller
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6deac83e30d8acd4cbb8c7d8a11545bd
+    m_Address: Assets/3DAssets/Animations/Male/Movement/Run/HumanM@Run01_Forward.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 747251a0299db77498683c9dbc61bcb8
+    m_Address: Assets/3DAssets/Materials/EnemyNormal.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81bb9eea30387e442899949a80011e55
+    m_Address: Assets/3DAssets/Banana Man.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84781f800961561439ffe31c702436b5
+    m_Address: Assets/3DAssets/Animations/Male/Combat/AssaultRifle/HumanM@AssaultRifle_Aim01.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87bc168f3f265464cac442e22c90aa65
+    m_Address: Assets/Generated/Prefabs/Enemy_Normal.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94d9ed78b09fde44ba3b99ddb6ab433f
+    m_Address: Assets/Generated/Prefabs/Enemy_Boss.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9c09083889536b438ed162348604467
+    m_Address: Assets/Generated/Prefabs/Player.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c133e3c197c12e04a9dd23bd0966910f
+    m_Address: Assets/3DAssets/Animations/Male/Movement/Walk/HumanM@Walk01_Forward.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7ee9808246b29f4cade0afc62eb053c
+    m_Address: Assets/Generated/Prefabs/Enemy_Elite.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dece7f5e9acbce547b6aaef4caa88e0e
+    m_Address: Assets/3DAssets/Animations/BossController.controller
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fefe5b0d603a2984baeeaed3e71ef616
+    m_Address: Assets/3DAssets/Animations/PlayerController.controller
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5248632a2b6c58d48b765d709c37c8a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6f89ad16bb148bf4c823b65b806f1cf3, type: 2}
+    - {fileID: 11400000, guid: f1bd2f91c9c88524bb18b87b0e877adb, type: 2}
