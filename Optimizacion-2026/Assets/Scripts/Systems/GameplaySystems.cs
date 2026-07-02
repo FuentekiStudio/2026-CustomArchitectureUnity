@@ -307,6 +307,7 @@ public sealed class BuffWallSystem : IFixedUpdateable
     }
 
     public IReadOnlyList<BuffWallEntity> ActiveWalls => activeWalls;
+    public int ActiveCount => activeWalls.Count;
 
     public void Register(BuffWallEntity wall)
     {

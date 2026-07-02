@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2270348729373621534}
   - component: {fileID: 1786975953171903760}
   - component: {fileID: 5645737199833894602}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuffWall_Projectiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
