@@ -52,7 +52,7 @@ public sealed class GameStateSystem
 
     public void Restart()
     {
-        CLogger.Log("GameStateSystem: Restart called");
+        //CLogger.Log("GameStateSystem: Restart called");
         StartGame();
     }
 

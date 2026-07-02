@@ -76,7 +76,7 @@ public sealed class GameUIView : MonoBehaviour
 
     public void ShowDefeat()
     {
-        CLogger.Log("GameUIView: ShowDefeat called");
+        //CLogger.Log("GameUIView: ShowDefeat called");
         ClearActiveButtons(activeButtons, uiSystem);
 
         activeButtons.Add(uiSystem.SetUpButton("Restart Game", OnRestartPressed, defeatPanel.transform));
